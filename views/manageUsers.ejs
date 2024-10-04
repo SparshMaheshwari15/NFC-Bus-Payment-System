@@ -1,0 +1,50 @@
+<%- include('partials/header') %>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Manage Users</h1>
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Card ID</th>
+                <th>Student ID</th>
+                <th>Student Name</th>
+                <th>Balance</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% users.forEach(user => { %>
+                <tr>
+                    <td>
+                        <%= user.card_id %>
+                    </td>
+                    <td>
+                        <%= user.student_id %>
+                    </td>
+                    <td>
+                        <%= user.student_name %>
+                    </td>
+                    <td>₹<%= user.balance %></td>
+                    <td>
+                        <%= user.status %>
+                    </td>
+                    <td>
+                        <form action="/api/users/manage/toggle" method="POST" style="display:inline;">
+                            <input type="hidden" name="card_id" value="<%= user.card_id %>">
+                            <button type="submit" class="btn <%= user.status === 'Enabled' ? 'btn-danger' : 'btn-success' %>">
+                                <%= user.status === 'Enabled' ? 'Disable' : 'Enable' %>
+                            </button>
+                        </form>
+                        <form action="/api/users/delete" method="POST" style="display:inline;">
+                            <input type="hidden" name="card_id" value="<%= user.card_id %>">
+                            <button type="submit" class="btn btn-danger ml-2" onclick="return confirm('Are you sure you want to delete this user?');">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>
+<%- include('partials/footer') %>

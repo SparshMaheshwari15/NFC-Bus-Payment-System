@@ -1,0 +1,23 @@
+<%- include('partials/header') %>
+    <div class="container">
+        <h2>Deduct Balance</h2>
+
+
+        <form action="/api/users/deductBalanceAdmin" method="POST">
+            <div class="form-group">
+                <label for="token">Authorization Token:</label>
+                <input type="text" class="form-control" id="token" name="token" required value="abcd">
+            </div>
+            <div class="form-group">
+                <label for="card_id">Card ID:</label>
+                <input type="text" class="form-control" id="card_id" name="card_id" required value="aa">
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount to Deduct:</label>
+                <input type="number" class="form-control" id="amount" name="amount" required min="1">
+            </div>
+            <button type="submit" class="btn btn-danger">Deduct Balance</button>
+        </form>
+        <a href="/users/view" class="btn btn-link">Back to Users</a>
+    </div>
+    <%- include('partials/footer') %>

@@ -1,0 +1,32 @@
+<%- include('partials/header') %>
+  <h1>User List</h1>
+  <table>
+    <tr>
+      <th>Card ID</th>
+      <th>Student ID</th>
+      <th>Balance</th>
+      <th>Status</th>
+      <th>Student Name</th>
+    </tr>
+    <% users.forEach(function(user) { %>
+      <tr>
+        <td>
+          <%= user.card_id %>
+        </td>
+        <td>
+          <%= user.student_id %>
+        </td>
+        <td>
+          ₹<%= user.balance %>
+        </td>
+        <td>
+          <%= user.status %>
+        </td>
+        <td>
+          <%= user.student_name %>
+        </td>
+      </tr>
+      <% }); %>
+  </table>
+
+  <%- include('partials/footer') %>

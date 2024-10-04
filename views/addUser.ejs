@@ -1,0 +1,47 @@
+<%- include('partials/header') %>
+
+
+    <div class="container mt-5">
+        <h2 class="text-center">Add User</h2>
+        <form class="add-user-form" action="/api/users/addUser" method="POST" novalidate>
+            <div class="form-group">
+                <label for="card_id">Card ID</label>
+                <input type="text" class="form-control" id="card_id" name="user[card_id]" required>
+                <div class="invalid-feedback">Please provide a card ID.</div>
+            </div>
+            <div class="form-group">
+                <label for="student_id">Student ID</label>
+                <input type="text" class="form-control" id="student_id" name="user[student_id]" required>
+                <div class="invalid-feedback">Please provide a student ID.</div>
+            </div>
+            <div class="form-group">
+                <label for="student_name">Student Name</label>
+                <input type="text" class="form-control" id="student_name" name="user[student_name]" required>
+                <div class="invalid-feedback">Please provide a student name.</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Add User</button>
+            <a href="/users/view" class="btn btn-secondary ml-2">View Users</a>
+        </form>
+    </div>
+
+    <script>
+        // Bootstrap validation for form
+        (function () {
+            'use strict'
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.add-user-form')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault() // Prevent form submission
+                            event.stopPropagation() // Stop further propagation
+                        }
+                        form.classList.add('was-validated') // Add Bootstrap validation class
+                    }, false)
+                })
+        })()
+    </script>
+    <%- include('partials/footer') %>
