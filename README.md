@@ -48,7 +48,7 @@ This project is a smart bus payment system that utilizes **NFC cards** to manage
    ```
 4. **Run the application**:
    ```bash
-   npm start
+   nodemon server.js
     ```
 ## Usage
 
