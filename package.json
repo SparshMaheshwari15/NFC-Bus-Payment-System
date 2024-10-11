@@ -18,6 +18,7 @@
     "express-session": "^1.18.0",
     "joi": "^17.13.3",
     "mongodb": "^6.9.0",
-    "mongoose": "^8.7.0"
+    "mongoose": "^8.7.0",
+    "twilio": "^5.3.3"
   }
 }

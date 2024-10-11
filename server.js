@@ -13,6 +13,27 @@ const userRoutes = require("./routes/user.js");
 const session = require("express-session");
 const flash = require("connect-flash");
 
+// const atlasUrl = process.env.ATLASDB_URL;
+// main()
+//     .then((res) => {
+//         console.log("Connection Successful to DB");
+//     })
+//     .catch((e) => {
+//         console.log("Error in db");
+//         console.log(e);
+//     });
+
+// async function main() {
+//     try {
+//         await mongoose.connect("mongodb+srv://sparshmaheshwari15:lgXSc0lcNgXMG4mW@cluster0.bmdmq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
+//         console.log("Connection Successful to DB");
+//     } catch (e) {
+//         console.log("Error in db");
+//         console.error(e);
+//     }
+// }
+
+// main();
 
 // Express session middleware
 app.use(

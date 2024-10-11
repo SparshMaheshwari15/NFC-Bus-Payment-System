@@ -23,6 +23,27 @@ table tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
+.bgColor {
+    background-color: #4caf50;
+}
+
+.btn-status {
+    width: 100px; /* Set a fixed width */
+    text-align: center; /* Center align the text */
+}
+
+.card {
+    border: 1px solid #ced4da; /* Light gray border */
+}
+
+.card-title {
+    font-weight: bold;
+}
+
+.card-text {
+    margin: 0.5rem 0; /* Spacing between text lines */
+}
+
 .add-user-form {
     background: white;
     padding: 20px;
@@ -98,4 +119,3 @@ table tr:nth-child(even) {
     background-color: #0056b3; /* Darker blue on hover */
     color: white; /* Keeps the text color white on hover */
 }
-
