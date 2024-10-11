@@ -1,3 +1,4 @@
+const { required } = require("joi");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -5,10 +6,12 @@ const userSchema = new Schema({
     card_id: {
         type: String,
         required: true,
+        unique: true,
     },
     student_id: {
         type: String,
         required: true,
+        unique: true,
     },
     balance: {
         type: Number,
@@ -24,6 +27,15 @@ const userSchema = new Schema({
     student_name: {
         type: String,
         required: true,
+    },
+    last_transaction: {
+        type: Date,
+        default: new Date(),
+    },
+    phone_number: {
+        type: String,
+        required: true,
+        unique: true,
     },
 });
 
