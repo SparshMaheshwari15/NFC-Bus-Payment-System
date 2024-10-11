@@ -23,7 +23,12 @@ exports.renderUsersPage = async (req, res) => {
 
 exports.deductBalanceBus = async (req, res) => {
     const token = req.headers["authorization"];
-    if (token !== process.env.ESP32TOKEN) {
+    const token2 = req.headers["authorization2"];
+
+    if (
+        token !== process.env.ESP32TOKEN ||
+        token2 !== process.env.ESP32TOKEN2
+    ) {
         // Compare with your token
         return res.status(401).json({ message: "Unauthorized" });
     }
@@ -33,31 +38,40 @@ exports.deductBalanceBus = async (req, res) => {
     }
     try {
         const user = await User.findOne({ card_id });
-
+        const now = new Date();
+        const MIN_TIME_BETWEEN_TRANSACTION =
+            process.env.MIN_TIME_BETWEEN_TRANSACTION;
         if (!user) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status(404).json({ error: "User not found" });
         }
         if (user.status === "Disabled") {
-            return res.status(401).json({ message: "Card Disabled" });
-        }
-        if (user.balance < amount) {
+            return res.status(401).json({ error: "Card Disabled" });
+        } else if (user.balance < amount) {
             user.status = "Disabled";
-            return res.status(400).json({ message: "Insufficient balance" });
+            return res.status(400).json({ error: "Insufficient balance" });
+        } else if (
+            user.last_transaction &&
+            now - user.last_transaction < MIN_TIME_BETWEEN_TRANSACTION
+        ) {
+            return res
+                .status(429)
+                .json({ error: "Card used recently. Try again later." });
+        } else {
+            user.balance -= amount; // Deduct the balance
+            user.last_transaction = now;
         }
-
-        user.balance -= amount; // Deduct the balance
         if (user.balance < 20) {
             user.status = "Disabled";
         }
         await user.save(); // Save the updated user
 
         res.json({
-            message: "Balance deducted successfully",
+            success: "Balance deducted successfully",
             new_balance: user.balance,
         });
     } catch (error) {
         console.error("Error deducting balance:", error);
-        res.status(500).json({ message: "Internal Server Error" });
+        res.status(500).json({ error: "Internal Server Error" });
     }
 };
 
@@ -72,8 +86,8 @@ exports.addBalance = async (req, res) => {
         }
         if (user.status === "Disabled") {
             user.status = "Enabled";
-            req.flash("error", "Card disabled");
-            return res.redirect("/users/view");
+            req.flash("error", `Card disabled of card id ${user.card_id}`);
+            return res.redirect("/users/manage");
         }
         // Convert amount to a number
         const amountToAdd = Number(amount);
@@ -223,7 +237,12 @@ exports.toggleUserStatus = async (req, res) => {
 };
 
 // Array of card IDs that cannot be deleted
-const protectedCardIds = ["21 E7 58 1C", "F3 55 69 19", "03 E0 59 09"];
+const protectedCardIds = [
+    "21 E7 58 1C",
+    "F3 55 69 19",
+    "03 E0 59 09",
+    "17 6D 8F 76",
+];
 exports.deleteUser = async (req, res) => {
     const { card_id } = req.body;
     // Check if the user is protected

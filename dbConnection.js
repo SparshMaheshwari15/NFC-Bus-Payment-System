@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const dbUrl = process.env.LOCALDB_URL;
 main()
@@ -15,4 +15,3 @@ async function main() {
 }
 
 module.exports = main;
-

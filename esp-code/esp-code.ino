@@ -15,6 +15,7 @@ void setup() {
   SPI.begin();                 // Initialize SPI bus
   mfrc522.PCD_Init();          // Initialize MFRC522 card reader
   WiFi.begin(ssid, password);  // Connect to Wi-Fi
+  
   // Wait for connection
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
@@ -69,6 +70,7 @@ void deductBalance(String cardID, int amount) {
     // Set the content type and authorization header
     http.addHeader("Content-Type", "application/json");
     http.addHeader("Authorization", AUTH_TOKEN);  
+    http.addHeader("Authorization2", AUTH_TOKEN2);  
 
     // Create JSON payload
     String jsonPayload = "{\"card_id\": \"" + cardID + "\", \"amount\": " + String(amount) + "}";
