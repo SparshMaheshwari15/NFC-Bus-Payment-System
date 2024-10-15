@@ -1,13 +1,16 @@
 const express = require("express");
 const {
     getAllUsers,
-    addBalance,
     addUser,
-    deductBalanceAdmin,
-    deductBalanceBus,
     toggleUserStatus,
     deleteUser,
 } = require("../controllers/user.js");
+
+const {
+    deductBalanceAdmin,
+    deductBalanceBus,
+    addBalance,
+} = require("../controllers/balance.js");
 const { validateUser } = require("../middleware.js");
 const router = express.Router();
 
