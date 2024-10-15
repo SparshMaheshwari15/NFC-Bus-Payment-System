@@ -7,6 +7,6 @@ module.exports.userSchema = Joi.object({
         balance: Joi.number().default(0),
         student_name: Joi.string().required(),
         status: Joi.string().default("Disabled").allow("Enabled", "Disabled"),
+        phone_number: Joi.string().required(),
     }).required(),
 });
-

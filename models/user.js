@@ -34,8 +34,9 @@ const userSchema = new Schema({
     },
     phone_number: {
         type: String,
-        required: true,
-        unique: true,
+        // required: true,
+        // unique: true,
+        default: "+919811890414",
     },
 });
 

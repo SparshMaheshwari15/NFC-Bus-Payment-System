@@ -1,4 +1,6 @@
+const ProtectedCard = require("../models/protectedCard");
 const User = require("../models/user");
+const sendWhatsAppMessage = require("../twilioClient");
 
 // Function to get all users (for API)
 exports.getAllUsers = async (req, res) => {
@@ -30,11 +32,11 @@ exports.deductBalanceBus = async (req, res) => {
         token2 !== process.env.ESP32TOKEN2
     ) {
         // Compare with your token
-        return res.status(401).json({ message: "Unauthorized" });
+        return res.status(401).json({ error: "Unauthorized" });
     }
     const { card_id, amount } = req.body;
     if (amount < 0) {
-        return res.status(401).json({ message: "Wrong amount" });
+        return res.status(401).json({ error: "Wrong amount" });
     }
     try {
         const user = await User.findOne({ card_id });
@@ -59,16 +61,45 @@ exports.deductBalanceBus = async (req, res) => {
         } else {
             user.balance -= amount; // Deduct the balance
             user.last_transaction = now;
+            res.json({
+                success: "Balance deducted successfully",
+                new_balance: user.balance,
+            });
+            const transactionDate = user.last_transaction.toLocaleDateString(
+                "en-US",
+                {
+                    weekday: "short",
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                }
+            );
+
+            const transactionTime = user.last_transaction.toLocaleTimeString(
+                "en-US",
+                {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: false,
+                }
+            );
+            const msg =
+                `Hello ${user.student_name}, your NFC card for bus payment was used. The transaction details are as follows:\n` +
+                `- Card ID: ${user.card_id}\n` +
+                `- Registration Number: ${user.student_id}\n` +
+                `- Amount Deducted: ₹${amount}\n` +
+                `- Remaining Balance: ₹${user.balance}\n` +
+                `- Transaction Date: ${transactionDate}\n` +
+                `- Transaction Time: ${transactionTime}\n\n` +
+                `Thank you for using the service!`;
+
+            sendWhatsAppMessage(user.phone_number, msg);
         }
         if (user.balance < 20) {
             user.status = "Disabled";
         }
         await user.save(); // Save the updated user
-
-        res.json({
-            success: "Balance deducted successfully",
-            new_balance: user.balance,
-        });
     } catch (error) {
         console.error("Error deducting balance:", error);
         res.status(500).json({ error: "Internal Server Error" });
@@ -116,13 +147,19 @@ exports.addBalance = async (req, res) => {
 
 exports.addUser = async (req, res) => {
     const { user } = req.body;
-    if (!user.card_id || !user.student_id || !user.student_name) {
+    if (
+        !user.card_id ||
+        !user.student_id ||
+        !user.student_name ||
+        !user.phone_number
+    ) {
         return res.status(400).json({ message: "All fields are required" });
     }
     const newUser = new User({
         card_id: user.card_id,
         student_id: user.student_id,
         student_name: user.student_name,
+        phone_number: user.phone_number,
         // balance and Status will take default values
     });
 
@@ -236,24 +273,20 @@ exports.toggleUserStatus = async (req, res) => {
     }
 };
 
-// Array of card IDs that cannot be deleted
-const protectedCardIds = [
-    "21 E7 58 1C",
-    "F3 55 69 19",
-    "03 E0 59 09",
-    "17 6D 8F 76",
-];
 exports.deleteUser = async (req, res) => {
     const { card_id } = req.body;
-    // Check if the user is protected
-    if (protectedCardIds.includes(card_id)) {
-        req.flash("error", "This user cannot be deleted.");
-        return res.redirect("/users/manage");
-    }
     try {
-        const user = await User.findOneAndDelete({ card_id });
-
-        if (!user) {
+        // Check if the user is protected
+        const user = await ProtectedCard.findOne({ card_id });
+        if (user) {
+            req.flash(
+                "error",
+                "This user cannot be deleted it is a protected card."
+            );
+            return res.redirect("/users/manage");
+        }
+        const deleteUser = await User.findOneAndDelete({ card_id });
+        if (!deleteUser) {
             req.flash("error", "User not found");
             return res.redirect("/users/view");
         }

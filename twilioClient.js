@@ -16,8 +16,4 @@ function sendWhatsAppMessage(to, message) {
         .catch((error) => console.error(`Error sending message: ${error}`));
 }
 
-// Example usage
-const userPhoneNumber = "+919811890414"; // Replace with the recipient's phone number
-const notificationMessage = "Your card has been topped up successfully!";
-
-sendWhatsAppMessage(userPhoneNumber, notificationMessage);
+module.exports = sendWhatsAppMessage;
