@@ -3,26 +3,52 @@
 #include <HTTPClient.h>
 #include <WiFi.h>
 #include "auth.h"  // Include the token header file
+#include <LiquidCrystal_I2C.h>
+#include <ArduinoJson.h>
+#include <Wire.h>
 
 #define SS_PIN 21   // SDA pin
 #define RST_PIN 22  // RST pin
 
-MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
+// Define custom SDA and SCL pins for I2C
+#define CUSTOM_SDA 4
+#define CUSTOM_SCL 5
+
+MFRC522 mfrc522(SS_PIN, RST_PIN);    // Create MFRC522 instance
+LiquidCrystal_I2C lcd(0x27, 16, 2);  // set the LCD address to 0x3F for a 16 chars and 2 line display
 
 
 void setup() {
-  Serial.begin(115200);        
+  Serial.begin(115200);
+  // Initialize I2C with custom SDA and SCL pins
+  Wire.begin(CUSTOM_SDA, CUSTOM_SCL);  // Initialize I2C with custom pins
+  lcd.begin();
+  lcd.clear();
+  lcd.backlight();             // Make sure backlight is on
   SPI.begin();                 // Initialize SPI bus
   mfrc522.PCD_Init();          // Initialize MFRC522 card reader
   WiFi.begin(ssid, password);  // Connect to Wi-Fi
-  
+  Serial.println("Connecting to WiFi");
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Connecting to WiFi");
   // Wait for connection
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
-    Serial.println("Connecting to WiFi...");
+    Serial.println(".");
   }
   Serial.println("Connected to WiFi");
+  Serial.println(ssid);
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Connected to");
+  lcd.setCursor(0, 1);
+  lcd.print(ssid);
+  delay(5000);
   Serial.println("Place your card to the reader...");
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Place your card to the reader...");
 }
 
 void loop() {
@@ -65,12 +91,12 @@ void deductBalance(String cardID, int amount) {
   }
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
-    http.begin(serverUrl); 
+    http.begin(serverUrl);
 
     // Set the content type and authorization header
     http.addHeader("Content-Type", "application/json");
-    http.addHeader("Authorization", AUTH_TOKEN);  
-    http.addHeader("Authorization2", AUTH_TOKEN2);  
+    http.addHeader("Authorization", AUTH_TOKEN);
+    http.addHeader("Authorization2", AUTH_TOKEN2);
 
     // Create JSON payload
     String jsonPayload = "{\"card_id\": \"" + cardID + "\", \"amount\": " + String(amount) + "}";
@@ -80,13 +106,53 @@ void deductBalance(String cardID, int amount) {
     if (httpResponseCode > 0) {
       String response = http.getString();  // Get response payload
       Serial.println("Response: " + response);
+
+      // Parse the JSON response
+      StaticJsonDocument<500> doc;
+      DeserializationError jsonError = deserializeJson(doc, response);
+
+      if (jsonError) {
+        Serial.print("JSON parsing failed: ");
+        Serial.println(jsonError.c_str());
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("JSON parsing failed");
+        return;  // Exit if parsing fails
+      }
+
+      const char* success = doc["success"];
+      const char* errorMsg = doc["error"];
+      int new_balance = doc["new_balance"];
+      if (success && strlen(success) > 0) {
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print(success);
+        lcd.setCursor(0, 1);
+        lcd.print("Balance: ");
+        lcd.print(new_balance);
+      } else if (errorMsg && strlen(errorMsg) > 0) {
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print(errorMsg);
+      }
+
     } else {
       Serial.print("Error on sending POST: ");
       Serial.println(httpResponseCode);
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Error on sending POST");
     }
 
     http.end();  // Free resources
   } else {
     Serial.println("WiFi not connected");
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("WiFi not connected");
   }
+  delay(3000);
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Place your card");
 }
