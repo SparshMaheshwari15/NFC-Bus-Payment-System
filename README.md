@@ -10,9 +10,7 @@ This project is a smart bus payment system that utilizes **NFC cards** to manage
 - **NFC Card Scanning**: Uses the RC522 NFC reader to read card data.
 - **Student Account Management**: Maintains student accounts with details such as balance and card status.
 - **Payment Processing**: Automatically deducts the fare from the student's account after scanning the NFC card.
-<!--
-- **Balance Notifications**: Sends a WhatsApp notification to students when their balance is low or after a payment is made.
--->
+- **Balance Notifications**: Sends a WhatsApp notification to students after a payment is made.
 - **Card Blocking**: Allows admins to block cards to prevent misuse.
 <!--
 - **User Authentication**: Secure login system for admins and users.
@@ -89,9 +87,8 @@ NFC-Bus-Payment-System/
 - **Frontend**: EJS (for rendering views)
 <!--
 - **Payment Integration**: UPI for recharging student accounts
-
-- **Messaging**: Twilio WhatsApp API
 -->
+- **Messaging**: Twilio WhatsApp API
 
 ## Contributing
 
