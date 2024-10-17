@@ -1,5 +1,7 @@
+const jwt = require("jsonwebtoken");
 const ProtectedCard = require("../models/protectedCard");
 const User = require("../models/user");
+const Account = require("../models/accounts");
 
 // Function to get all users (for API)
 exports.getAllUsers = async (req, res) => {
@@ -131,5 +133,52 @@ exports.deleteUser = async (req, res) => {
         console.error("Error deleting user:", error);
         req.flash("error", "Internal Server Error (Delete User)");
         return res.redirect("/users/view");
+    }
+};
+
+exports.loginDriver = async (req, res) => {
+    // Validate user credentials (e.g., check username and password)
+    const { username, password } = req.body;
+    const secretKey = process.env.SECRET_KEY; // Define your secret key
+    const expireTime = process.env.EXPIRE_TIME;
+
+    // If valid credentials
+    if (username === "abcd" && password === "abcd") {
+        // Create a token payload (usually the user ID or relevant data)
+        const payload = {
+            userId: 123, // Example user ID
+            role: "Driver",
+        };
+
+        // Sign the token with a secret key
+        const token = jwt.sign(payload, secretKey, { expiresIn: expireTime }); // Token expires in 1 hour
+
+        // Send token to the client
+        console.log("Log in success");
+        res.json({ token });
+    } else {
+        console.log("Log in fail");
+        res.status(401).json({ message: "Invalid credentials" });
+    }
+};
+
+exports.registerUser = async (req, res) => {
+    try {
+        let { username, role, password } = req.body;
+        console.log(req.body);
+
+        const newUser = new Account({ username, role });
+        const registeredUser = await Account.register(newUser, password);
+        console.log(registeredUser);
+
+        return res
+            .status(404)
+            .json({ success: "User Registered successfully" });
+        // req.flash("success", "Welcome");
+        // res.redirect("/");
+    } catch (e) {
+        // req.flash("error", e.message);
+        // res.redirect("/");
+        return res.status(404).json({ error: e.message });
     }
 };

@@ -17,6 +17,7 @@
 MFRC522 mfrc522(SS_PIN, RST_PIN);    // Create MFRC522 instance
 LiquidCrystal_I2C lcd(0x27, 16, 2);  // set the LCD address to 0x3F for a 16 chars and 2 line display
 
+String token;
 
 void setup() {
   Serial.begin(115200);
@@ -44,6 +45,8 @@ void setup() {
   lcd.print("Connected to");
   lcd.setCursor(0, 1);
   lcd.print(ssid);
+  // Send login request once connected
+  sendLoginRequest();
   delay(5000);
   Serial.println("Place your card to the reader...");
   lcd.clear();
@@ -95,7 +98,8 @@ void deductBalance(String cardID, int amount) {
 
     // Set the content type and authorization header
     http.addHeader("Content-Type", "application/json");
-    http.addHeader("Authorization", AUTH_TOKEN);
+    http.addHeader("Authorization", "Bearer " + String(token));
+    http.addHeader("Authorization1", AUTH_TOKEN);
     http.addHeader("Authorization2", AUTH_TOKEN2);
 
     // Create JSON payload
@@ -117,6 +121,10 @@ void deductBalance(String cardID, int amount) {
         lcd.clear();
         lcd.setCursor(0, 0);
         lcd.print("JSON parsing failed");
+        delay(3000);
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Place your card");
         return;  // Exit if parsing fails
       }
 
@@ -155,4 +163,51 @@ void deductBalance(String cardID, int amount) {
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Place your card");
+}
+
+void sendLoginRequest() {
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+
+    // Specify the URL of your login endpoint
+    http.begin(loginUrl);  // Replace with your actual login URL
+
+    // Set request headers (optional)
+    http.addHeader("Content-Type", "application/json");
+
+    // Create the JSON payload with username and password
+    String requestBody = "{\"username\":\"abcd\",\"password\":\"abcd\"}";
+
+    // Send the POST request with the payload
+    int httpResponseCode = http.POST(requestBody);
+
+    // Check for a response
+    if (httpResponseCode > 0) {
+      String response = http.getString();  // Get the response to the request
+      Serial.println(httpResponseCode);    // Print HTTP return code
+      Serial.println(response);            // Print server response (JWT token)
+
+      // Parse token from the response
+      DynamicJsonDocument doc(512);
+      DeserializationError error = deserializeJson(doc, response);
+
+      if (!error) {
+        // Use as<String>() to properly convert the token from JSON
+        String tempToken = doc["token"].as<String>();        // Extract token as String
+        token = tempToken.c_str();                           // Convert String to const char*
+        Serial.println("Token received: " + String(token));  // Verify the token
+      } else {
+        Serial.print("Failed to parse JSON: ");
+        Serial.println(error.c_str());
+      }
+    } else {
+      Serial.print("Error on sending POST: ");
+      Serial.println(httpResponseCode);
+    }
+
+    // Close the connection
+    http.end();
+  } else {
+    Serial.println("WiFi not connected");
+  }
 }

@@ -2,11 +2,10 @@ const User = require("../models/user");
 const sendWhatsAppMessage = require("../twilioClient");
 
 exports.deductBalanceBus = async (req, res) => {
-    const token = req.headers["authorization"];
+    const token1 = req.headers["authorization1"];
     const token2 = req.headers["authorization2"];
-
     if (
-        token !== process.env.ESP32TOKEN ||
+        token1 !== process.env.ESP32TOKEN ||
         token2 !== process.env.ESP32TOKEN2
     ) {
         // Compare with your token
@@ -72,7 +71,7 @@ exports.deductBalanceBus = async (req, res) => {
                 `- Transaction Time: ${transactionTime}\n\n` +
                 `Thank you for using the service!`;
 
-            sendWhatsAppMessage(user.phone_number, msg);
+            // sendWhatsAppMessage(user.phone_number, msg);
         }
         if (user.balance < 20) {
             user.status = "Disabled";
