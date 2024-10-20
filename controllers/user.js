@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const ProtectedCard = require("../models/protectedCard");
 const User = require("../models/user");
-const Account = require("../models/accounts");
+const Account = require("../models/account");
 
 // Function to get all users (for API)
 exports.getAllUsers = async (req, res) => {
@@ -17,7 +17,7 @@ exports.getAllUsers = async (req, res) => {
 exports.renderUsersPage = async (req, res) => {
     try {
         const users = await User.find(); // Fetch all users
-        res.render("users", { users }); // Render the EJS template with users
+        res.render("user/users", { users }); // Render the EJS template with users
     } catch (error) {
         req.flash("error", "Error retrieving users");
         // res.status(500).json({ message: "Error retrieving users", error });
@@ -74,7 +74,7 @@ exports.addUser = async (req, res) => {
 exports.renderManageUser = async (req, res) => {
     try {
         const users = await User.find(); // Fetch all users
-        res.render("manageUsers", { users }); // Render the page with user data
+        res.render("user/manageUsers", { users }); // Render the page with user data
     } catch (error) {
         console.error("Error fetching users:", error);
         req.flash("error", "Unable to fetch users");
@@ -136,10 +136,10 @@ exports.deleteUser = async (req, res) => {
     }
 };
 
-exports.loginDriver = async (req, res) => {
+exports.driverLogin = async (req, res) => {
     // Validate user credentials (e.g., check username and password)
     const { username, password } = req.body;
-    const secretKey = process.env.SECRET_KEY; // Define your secret key
+    const secretKey = process.env.JWT_SECRET_KEY; // Define your secret key
     const expireTime = process.env.EXPIRE_TIME;
 
     // If valid credentials
@@ -165,20 +165,23 @@ exports.loginDriver = async (req, res) => {
 exports.registerUser = async (req, res) => {
     try {
         let { username, role, password } = req.body;
-        console.log(req.body);
 
         const newUser = new Account({ username, role });
-        const registeredUser = await Account.register(newUser, password);
-        console.log(registeredUser);
+        await Account.register(newUser, password);
+        req.flash("success", "User Registered successfully");
 
-        return res
-            .status(404)
-            .json({ success: "User Registered successfully" });
-        // req.flash("success", "Welcome");
-        // res.redirect("/");
+        return res.redirect("/users/view");
+        // return res
+        //     .status(404)
+        //     .json({ success: "User Registered successfully" });
     } catch (e) {
-        // req.flash("error", e.message);
-        // res.redirect("/");
-        return res.status(404).json({ error: e.message });
+        req.flash("error", e.message);
+        res.redirect("/users/signup");
+        // return res.status(404).json({ error: e.message });
     }
+};
+
+module.exports.userLogin = async (req, res) => {
+    req.flash("success", "Login in successfully");
+    res.redirect("/users/view");
 };

@@ -4,8 +4,9 @@ const {
     addUser,
     toggleUserStatus,
     deleteUser,
-    loginDriver,
     registerUser,
+    driverLogin,
+    userLogin,
 } = require("../controllers/user.js");
 
 const {
@@ -15,6 +16,7 @@ const {
 } = require("../controllers/balance.js");
 const { validateUser } = require("../middleware.js");
 const authenticateJWT = require("../utils/auth.js");
+const passport = require("passport");
 const router = express.Router();
 
 // Route to get all users as JSON
@@ -34,4 +36,12 @@ router.post("/users/delete", deleteUser);
 router.post("/users/login/driver", driverLogin);
 router.post("/users/signup", registerUser);
 
+router.post(
+    "/users/login",
+    passport.authenticate("local", {
+        failureRedirect: "/users/login",
+        failureFlash: true,
+    }),
+    userLogin
+);
 module.exports = router;

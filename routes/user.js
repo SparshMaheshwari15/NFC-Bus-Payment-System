@@ -1,5 +1,9 @@
 const express = require("express");
-const { renderUsersPage, renderManageUser } = require("../controllers/user");
+const {
+    renderUsersPage,
+    renderManageUser,
+    userLogin,
+} = require("../controllers/user");
 const router = express.Router();
 
 // Route to render the EJS page with users
@@ -12,7 +16,7 @@ router.get("/addBalance", (req, res) => {
 
 // Route to render the add user form
 router.get("/add", (req, res) => {
-    res.render("addUser.ejs");
+    res.render("user/addUser.ejs");
 });
 
 // Route to render the deduct balance form page
@@ -22,4 +26,13 @@ router.get("/deductBalanceAdmin", (req, res) => {
 
 router.get("/manage", renderManageUser);
 
+// Render the signup page
+router.get("/signup", (req, res) => {
+    res.render("user/signup.ejs");
+});
+
+// Render login page
+router.get("/login", (req, res) => {
+    res.render("user/login.ejs");
+});
 module.exports = router;
