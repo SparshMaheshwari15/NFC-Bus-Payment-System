@@ -7,7 +7,7 @@ router.get("/view", renderUsersPage);
 
 // Render the add balance form page
 router.get("/addBalance", (req, res) => {
-    res.render("addBalance.ejs");
+    res.render("balance/addBalance.ejs");
 });
 
 // Route to render the add user form
@@ -17,7 +17,7 @@ router.get("/add", (req, res) => {
 
 // Route to render the deduct balance form page
 router.get("/deductBalanceAdmin", (req, res) => {
-    res.render("deductBalanceAdmin.ejs");
+    res.render("balance/deductBalanceAdmin.ejs");
 });
 
 router.get("/manage", renderManageUser);

@@ -31,7 +31,7 @@ router.post("/users/addUser", validateUser, addUser);
 router.post("/users/deductBalanceAdmin", deductBalanceAdmin);
 router.post("/users/manage/toggle", toggleUserStatus);
 router.post("/users/delete", deleteUser);
-router.post("/users/login/driver", loginDriver);
+router.post("/users/login/driver", driverLogin);
 router.post("/users/signup", registerUser);
 
 module.exports = router;

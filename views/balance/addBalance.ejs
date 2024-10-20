@@ -1,5 +1,5 @@
-<%- include('partials/header') %>
-    <div class="container mt-5">
+<%- include('../partials/header') %>
+    <div class="container mt-5 col-6 offset-3">
         <h2 class="text-center">Add Balance to User</h2>
         <form action="/api/users/addBalance" method="POST" class="needs-validation" novalidate>
             <div class="mb-3">
@@ -45,4 +45,4 @@
             })
         })()
     </script>
-<%- include('partials/footer') %>
+<%- include('../partials/footer') %>
