@@ -6,6 +6,7 @@ const accountSchema = new Schema({
     role: {
         type: String,
         enum: ["Driver", "Admin", "Viewer"],
+        default: "Driver",
         required: true,
     },
     phone_number: {
@@ -13,12 +14,14 @@ const accountSchema = new Schema({
         // required: true,
         // unique: true,
         default: "+919811890414",
+        lowercase: true,
+        trim: true, // Remove whitespace from both ends
     },
     email: {
         type: String,
-        required: true,
-        unique: true,
-        default:"Spa"
+        // required: true,
+        // unique: true,
+        default: "Spa",
     },
 });
 
