@@ -65,7 +65,7 @@ app.use("/api", apiRoutes);
 app.use("/users", userRoutes);
 
 // Webhook to handle incoming WhatsApp messages
-app.use("/whatsapp", whatsappRoutes);
+// app.use("/whatsapp", whatsappRoutes);
 
 app.get("*", (req, res) => {
     res.redirect("/users/view");

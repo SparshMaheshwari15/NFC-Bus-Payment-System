@@ -1,8 +1,9 @@
 const twilio = require("twilio");
 
-const TWILIO_AUTH_TOKEN = "your_twilio_auth_token"; // Replace with your actual Auth Token
+const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN; // Replace with your actual Auth Token
 
 function validateTwilioRequest(req, res, next) {
+    console.log("Inside validateTwilioRequest");
     const twilioSignature = req.headers["x-twilio-signature"];
     const url = req.protocol + "://" + req.get("host") + req.originalUrl;
 
