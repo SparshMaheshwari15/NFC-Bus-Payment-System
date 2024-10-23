@@ -2,6 +2,7 @@ const sendLastTransactionDetails = require("../utils/Twilio/receiveMsg");
 
 const { MessagingResponse } = require("twilio").twiml;
 exports.sendMsg = async (req, res) => {
+    console.log("In sendMsg");
     const receivedMessage = req.body.Body.trim(); // The message sent via WhatsApp
     let fromNumber = req.body.From; // User WhatsApp number
 
