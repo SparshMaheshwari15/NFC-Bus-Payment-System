@@ -1,4 +1,3 @@
-// Import necessary modules
 const { MessagingResponse } = require("twilio").twiml;
 const User = require("../../models/user.js");
 
