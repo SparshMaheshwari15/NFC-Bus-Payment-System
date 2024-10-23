@@ -63,7 +63,6 @@ exports.deductBalanceBus = async (req, res) => {
             );
             const msg =
                 `Hello ${user.student_name}, your NFC card for bus payment was used. The transaction details are as follows:\n` +
-                `- Card ID: ${user.card_id}\n` +
                 `- Registration Number: ${user.student_id}\n` +
                 `- Amount Deducted: ₹${amount}\n` +
                 `- Remaining Balance: ₹${user.balance}\n` +

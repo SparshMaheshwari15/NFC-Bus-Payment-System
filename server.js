@@ -9,6 +9,7 @@ const connectDb = require("./dbConnection.js");
 
 const apiRoutes = require("./routes/api.js");
 const userRoutes = require("./routes/user.js");
+const whatsappRoutes = require("./routes/whatsapp.js");
 
 const session = require("express-session");
 const flash = require("connect-flash");
@@ -21,7 +22,7 @@ const Account = require("./models/account.js");
 const { registerUser } = require("./controllers/user.js");
 
 const bodyParser = require("body-parser");
-const sendLastTransactionDetails = require("./utils/Twilio/readmsg.js");
+const sendLastTransactionDetails = require("./utils/Twilio/receiveMsg.js");
 
 // Set up the EJS view engine
 app.set("view engine", "ejs");
@@ -66,29 +67,8 @@ app.use("/api", apiRoutes);
 app.use("/users", userRoutes);
 
 // Webhook to handle incoming WhatsApp messages
-app.post("/whatsapp", async (req, res) => {
-    console.log(req.body);
-    const receivedMessage = req.body.Body.trim(); // The message sent via WhatsApp
-    let fromNumber = req.body.From; // User's WhatsApp number
+app.post("/whatsapp", whatsappRoutes);
 
-    // Remove the "whatsapp:" prefix
-    fromNumber = fromNumber.replace('whatsapp:', '');
-    console.log(`receivedMessage: ${receivedMessage}`);
-    console.log(`fromNumber: ${fromNumber}`);
-    // Check if the message contains the keyword "transaction"
-    if (receivedMessage.toLowerCase() === "transaction") {
-        const twiml = await sendLastTransactionDetails(fromNumber); // Use the separated function
-        res.writeHead(200, { "Content-Type": "text/xml" });
-        res.end(twiml.toString());
-    } else {
-        const twiml = new MessagingResponse();
-        twiml.message(
-            "Please send 'transaction' to receive your last transaction details."
-        );
-        res.writeHead(200, { "Content-Type": "text/xml" });
-        res.end(twiml.toString());
-    }
-});
 app.get("*", (req, res) => {
     res.redirect("/users/view");
 });
