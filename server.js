@@ -68,8 +68,11 @@ app.use("/users", userRoutes);
 // Webhook to handle incoming WhatsApp messages
 app.post("/whatsapp", async (req, res) => {
     console.log(req.body);
-    const receivedMessage = req.body.Body; // The message sent via WhatsApp
+    const receivedMessage = req.body.Body.trim(); // The message sent via WhatsApp
     const fromNumber = req.body.From; // User's WhatsApp number
+
+    // Remove the "whatsapp:" prefix
+    fromNumber = fromNumber.replace('whatsapp:', '');
     console.log(`receivedMessage: ${receivedMessage}`);
     console.log(`fromNumber: ${fromNumber}`);
     // Check if the message contains the keyword "transaction"
