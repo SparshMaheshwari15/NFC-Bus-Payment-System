@@ -35,7 +35,6 @@ async function sendLastTransactionDetails(fromNumber) {
             );
 
             const msg = `Hello ${user.student_name}, here are your last transaction details:
-- Card ID: ${user.card_id}
 - Registration Number: ${user.student_id}
 - Remaining Balance: ₹${user.balance}
 - Transaction Date: ${transactionDate}
