@@ -1,6 +1,6 @@
 // Import necessary modules
 const { MessagingResponse } = require('twilio').twiml;
-const User = require('./models/user');
+const User = require('../../models/user.js');
 
 // Function to send last transaction details
 async function sendLastTransactionDetails(fromNumber) {
