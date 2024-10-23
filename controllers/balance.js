@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const sendWhatsAppMessage = require("../twilioClient");
+const sendWhatsAppMessage = require("../utils/Twilio/twilioClient");
 
 exports.deductBalanceBus = async (req, res) => {
     const token1 = req.headers["authorization1"];

@@ -93,6 +93,11 @@ void deductBalance(String cardID, int amount) {
     Serial.println("Connecting to WiFi...");
   }
   if (WiFi.status() == WL_CONNECTED) {
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Sending request...");
+
     HTTPClient http;
     http.begin(serverUrl);
 
@@ -143,7 +148,6 @@ void deductBalance(String cardID, int amount) {
         lcd.setCursor(0, 0);
         lcd.print(errorMsg);
       }
-
     } else {
       Serial.print("Error on sending POST: ");
       Serial.println(httpResponseCode);

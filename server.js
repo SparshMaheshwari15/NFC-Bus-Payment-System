@@ -20,6 +20,8 @@ const LocalStrategy = require("passport-local");
 const Account = require("./models/account.js");
 const { registerUser } = require("./controllers/user.js");
 
+const bodyParser = require('body-parser');
+
 // Set up the EJS view engine
 app.set("view engine", "ejs");
 app.use(express.static("public")); // Serve static files
@@ -27,6 +29,9 @@ app.use(express.static("public")); // Serve static files
 // Middleware to parse JSON and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(bodyParser.urlencoded({ extended: false }));
+
 
 // Express session middleware
 app.use(
@@ -60,6 +65,23 @@ app.use((req, res, next) => {
 app.use("/api", apiRoutes);
 app.use("/users", userRoutes);
 
+// Webhook to handle incoming WhatsApp messages
+app.post('/whatsapp', async (req, res) => {
+    const receivedMessage = req.body.Body.trim();  // The message sent via WhatsApp
+    const fromNumber = req.body.From;  // User's WhatsApp number
+
+    // Check if the message contains the keyword "transaction"
+    if (receivedMessage.toLowerCase() === 'transaction') {
+        const twiml = await sendLastTransactionDetails(fromNumber);  // Use the separated function
+        res.writeHead(200, { 'Content-Type': 'text/xml' });
+        res.end(twiml.toString());
+    } else {
+        const twiml = new MessagingResponse();
+        twiml.message("Please send 'transaction' to receive your last transaction details.");
+        res.writeHead(200, { 'Content-Type': 'text/xml' });
+        res.end(twiml.toString());
+    }
+});
 app.get("*", (req, res) => {
     res.redirect("/users/view");
 });
