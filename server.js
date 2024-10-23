@@ -73,7 +73,7 @@ app.post("/whatsapp", async (req, res) => {
     console.log(`fromNumber: ${fromNumber}`);
     // Check if the message contains the keyword "transaction"
     if (receivedMessage.toLowerCase() === "transaction") {
-        const twiml = await sendLastTransactionDetailsnsactionDetails(
+        const twiml = await sendLastTransactionDetails(
             fromNumber
         ); // Use the separated function
         res.writeHead(200, { "Content-Type": "text/xml" });
