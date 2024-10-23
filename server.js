@@ -19,10 +19,8 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const Account = require("./models/account.js");
-const { registerUser } = require("./controllers/user.js");
 
 const bodyParser = require("body-parser");
-const sendLastTransactionDetails = require("./utils/Twilio/receiveMsg.js");
 
 // Set up the EJS view engine
 app.set("view engine", "ejs");
@@ -67,7 +65,7 @@ app.use("/api", apiRoutes);
 app.use("/users", userRoutes);
 
 // Webhook to handle incoming WhatsApp messages
-app.post("/whatsapp", whatsappRoutes);
+app.use("/whatsapp", whatsappRoutes);
 
 app.get("*", (req, res) => {
     res.redirect("/users/view");
