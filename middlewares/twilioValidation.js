@@ -17,8 +17,10 @@ function validateTwilioRequest(req, res, next) {
     );
 
     if (!isValid) {
+        console.log("Forbidden: Invalid request signature.");
         return res.status(403).send("Forbidden: Invalid request signature.");
     }
+    console.log("Passed going to sendMsg");
 
     next();
 }
