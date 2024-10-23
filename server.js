@@ -69,7 +69,7 @@ app.use("/users", userRoutes);
 app.post("/whatsapp", async (req, res) => {
     console.log(req.body);
     const receivedMessage = req.body.Body.trim(); // The message sent via WhatsApp
-    const fromNumber = req.body.From; // User's WhatsApp number
+    let fromNumber = req.body.From; // User's WhatsApp number
 
     // Remove the "whatsapp:" prefix
     fromNumber = fromNumber.replace('whatsapp:', '');
