@@ -67,15 +67,14 @@ app.use("/users", userRoutes);
 
 // Webhook to handle incoming WhatsApp messages
 app.post("/whatsapp", async (req, res) => {
+    console.log(req.body);
     const receivedMessage = req.body.Body.trim(); // The message sent via WhatsApp
     const fromNumber = req.body.From; // User's WhatsApp number
     console.log(`receivedMessage: ${receivedMessage}`);
     console.log(`fromNumber: ${fromNumber}`);
     // Check if the message contains the keyword "transaction"
     if (receivedMessage.toLowerCase() === "transaction") {
-        const twiml = await sendLastTransactionDetails(
-            fromNumber
-        ); // Use the separated function
+        const twiml = await sendLastTransactionDetails(fromNumber); // Use the separated function
         res.writeHead(200, { "Content-Type": "text/xml" });
         res.end(twiml.toString());
     } else {
