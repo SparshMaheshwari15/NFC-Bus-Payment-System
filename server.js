@@ -21,6 +21,7 @@ const LocalStrategy = require("passport-local");
 const Account = require("./models/account.js");
 
 const bodyParser = require("body-parser");
+const twilio = require("twilio");
 
 // Set up the EJS view engine
 app.set("view engine", "ejs");
@@ -65,7 +66,7 @@ app.use("/api", apiRoutes);
 app.use("/users", userRoutes);
 
 // Webhook to handle incoming WhatsApp messages
-// app.use("/whatsapp", whatsappRoutes);
+// app.use("/whatsapp", twilio.webhook(), whatsappRoutes);
 
 app.get("*", (req, res) => {
     res.redirect("/users/view");
