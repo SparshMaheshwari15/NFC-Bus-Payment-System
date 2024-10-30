@@ -137,36 +137,40 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.driverLogin = async (req, res) => {
-    // Validate user credentials (e.g., check username and password)
-    const { username, password } = req.body;
-    const secretKey = process.env.JWT_SECRET_KEY; // Define your secret key
-    const expireTime = process.env.EXPIRE_TIME;
+    try {
+        const user = req.user;
 
-    // If valid credentials
-    if (username === "abcd" && password === "abcd") {
-        // Create a token payload (usually the user ID or relevant data)
+        // Check if the user object exists
+        if (!user) {
+            return res.status(401).json({ message: "User not authenticated." });
+        }
+
+        // Define your secret key and expiration time
+        const secretKey = process.env.JWT_SECRET_KEY;
+        const expireTime = process.env.EXPIRE_TIME || "1h"; // Default to 1 hour if not set
+
+        // Create a token payload
         const payload = {
-            userId: 123, // Example user ID
-            role: "Driver",
+            userId: user.id,
+            role: user.role,
         };
 
-        // Sign the token with a secret key
-        const token = jwt.sign(payload, secretKey, { expiresIn: expireTime }); // Token expires in 1 hour
+        // Sign the token with the secret key
+        const token = jwt.sign(payload, secretKey, { expiresIn: expireTime });
 
-        // Send token to the client
+        // Send the token to the client
         console.log("Log in success");
         res.json({ token });
-    } else {
-        console.log("Log in fail");
-        res.status(401).json({ message: "Invalid credentials" });
+    } catch (error) {
+        console.error("Error during token generation:", error);
+        res.status(500).json({ message: "Internal server error" });
     }
 };
 
 exports.registerUser = async (req, res) => {
     try {
-        let { username, role, password } = req.body;
-
-        const newUser = new Account({ username, role });
+        let { username, role, password, email } = req.body;
+        const newUser = new Account({ username, role, email });
         await Account.register(newUser, password);
         req.flash("success", "User Registered successfully");
 
@@ -183,5 +187,16 @@ exports.registerUser = async (req, res) => {
 
 module.exports.userLogin = async (req, res) => {
     req.flash("success", "Login in successfully");
-    res.redirect("/users/view");
+    let redirectUrl = res.locals.redirectUrl || "/users/view";
+    res.redirect(redirectUrl);
+};
+
+module.exports.logout = (req, res, next) => {
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+        req.flash("success", "You are logged out successfully!");
+        res.redirect("/users/view");
+    });
 };

@@ -19,9 +19,8 @@ const accountSchema = new Schema({
     },
     email: {
         type: String,
-        // required: true,
-        // unique: true,
-        default: "Spa",
+        required: true,
+        unique: true,
     },
 });
 

@@ -4,30 +4,31 @@ const {
     renderManageUser,
     userLogin,
 } = require("../controllers/user");
+const { isAdmin } = require("../middlewares/auth");
 const router = express.Router();
 
 // Route to render the EJS page with users
-router.get("/view", renderUsersPage);
+router.get("/view", isAdmin, renderUsersPage);
 
 // Render the add balance form page
-router.get("/addBalance", (req, res) => {
+router.get("/addBalance", isAdmin, (req, res) => {
     res.render("balance/addBalance.ejs");
 });
 
 // Route to render the add user form
-router.get("/add", (req, res) => {
+router.get("/add", isAdmin, (req, res) => {
     res.render("user/addUser.ejs");
 });
 
 // Route to render the deduct balance form page
-router.get("/deductBalanceAdmin", (req, res) => {
+router.get("/deductBalanceAdmin", isAdmin, (req, res) => {
     res.render("balance/deductBalanceAdmin.ejs");
 });
 
-router.get("/manage", renderManageUser);
+router.get("/manage", isAdmin, renderManageUser);
 
 // Render the signup page
-router.get("/signup", (req, res) => {
+router.get("/signup", isAdmin, (req, res) => {
     res.render("user/signup.ejs");
 });
 
@@ -35,4 +36,5 @@ router.get("/signup", (req, res) => {
 router.get("/login", (req, res) => {
     res.render("user/login.ejs");
 });
+
 module.exports = router;

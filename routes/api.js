@@ -7,6 +7,7 @@ const {
     registerUser,
     driverLogin,
     userLogin,
+    logout,
 } = require("../controllers/user.js");
 
 const {
@@ -17,6 +18,12 @@ const {
 const { validateUser } = require("../middleware.js");
 const authenticateJWT = require("../utils/auth.js");
 const passport = require("passport");
+const {
+    saveRedirectUrl,
+    isAdmin,
+    authenticateDriver,
+    isDriver,
+} = require("../middlewares/auth.js");
 const router = express.Router();
 
 // Route to get all users as JSON
@@ -24,24 +31,31 @@ const router = express.Router();
 router.get("/users", getAllUsers);
 
 // Route to deduct balance
-router.post("/users/deductBalanceBus", authenticateJWT, deductBalanceBus);
+router.post(
+    "/users/deductBalanceBus",
+    isDriver,
+    authenticateJWT,
+    deductBalanceBus
+);
 
 // Route to add balance
-router.post("/users/addBalance", addBalance);
-
-router.post("/users/addUser", validateUser, addUser);
-router.post("/users/deductBalanceAdmin", deductBalanceAdmin);
-router.post("/users/manage/toggle", toggleUserStatus);
-router.post("/users/delete", deleteUser);
-router.post("/users/login/driver", driverLogin);
-router.post("/users/signup", registerUser);
+router.post("/users/addBalance", isAdmin, addBalance);
+router.post("/users/addUser", isAdmin, validateUser, addUser);
+router.post("/users/deductBalanceAdmin", isAdmin, deductBalanceAdmin);
+router.post("/users/manage/toggle", isAdmin, toggleUserStatus);
+router.post("/users/delete", isAdmin, deleteUser);
+router.post("/users/login/driver", authenticateDriver, driverLogin);
+router.post("/users/signup", isAdmin, registerUser);
 
 router.post(
     "/users/login",
+    saveRedirectUrl,
     passport.authenticate("local", {
         failureRedirect: "/users/login",
         failureFlash: true,
     }),
     userLogin
 );
+
+router.get("/users/logout", logout);
 module.exports = router;

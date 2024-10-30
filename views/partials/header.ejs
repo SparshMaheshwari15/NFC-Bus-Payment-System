@@ -47,7 +47,8 @@
                         <a class="nav-link" href="/users/addBalance" style="font-weight: 500;">Add Balance</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/users/deductBalanceAdmin" style="font-weight: 500;">Deduct Balance</a>
+                        <a class="nav-link" href="/users/deductBalanceAdmin" style="font-weight: 500;">Deduct
+                            Balance</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/users/manage" style="font-weight: 500;">Manage Users</a>
@@ -55,9 +56,22 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/users/signup" style="font-weight: 500;">Sign Up</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/users/login" style="font-weight: 500;">Login</a>
-                    </li>
+                    <%if(!currUser){%>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/users/login" style="font-weight: 500;">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" style="font-weight: 500;">Not logged in</a>
+                        </li>
+                        <%}%>
+                            <%if(currUser){%>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/api/users/logout" style="font-weight: 500;">Logout</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" style="font-weight: 500;"> <b>logged in <%=currUser.username%> </b> </a>
+                                </li>
+                                <%}%>
                 </ul>
             </div>
         </div>

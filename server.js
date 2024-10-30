@@ -22,6 +22,7 @@ const Account = require("./models/account.js");
 
 const bodyParser = require("body-parser");
 const twilio = require("twilio");
+const { isAdmin } = require("./middlewares/auth.js");
 
 // Set up the EJS view engine
 app.set("view engine", "ejs");
@@ -58,10 +59,13 @@ passport.deserializeUser(Account.deserializeUser());
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash("success");
     res.locals.error_msg = req.flash("error");
-    // res.locals.currUser = req.user;
+    res.locals.currUser = req.user;
     next();
 });
-
+// app.get("/testing", (req, res) => {
+//     res.send(res.locals.currUser);
+//     console.log(res.locals.currUser);
+// });
 app.use("/api", apiRoutes);
 app.use("/users", userRoutes);
 
@@ -69,7 +73,7 @@ app.use("/users", userRoutes);
 // app.use("/whatsapp", twilio.webhook(), whatsappRoutes);
 
 app.get("*", (req, res) => {
-    res.redirect("/users/view");
+    res.render("error.ejs");
 });
 
 // Start the server

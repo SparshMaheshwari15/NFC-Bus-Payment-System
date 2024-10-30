@@ -122,13 +122,11 @@ exports.addBalance = async (req, res) => {
 };
 
 exports.deductBalanceAdmin = async (req, res) => {
-    const { card_id, amount, token } = req.body;
+    const { card_id, amount } = req.body;
     const newAmount = Number(amount);
-    if (token !== process.env.LOCAL_TOKEN) {
-        // Compare with your token
-        req.flash("error", "Unauthorized Wrong Token");
+    if (newAmount < 0) {
+        req.flash("error", "Number can't be negative");
         return res.redirect("users/deductBalance");
-        // return res.status(401).json({ message: "Unauthorized" });
     }
     try {
         const user = await User.findOne({ card_id });
@@ -140,7 +138,7 @@ exports.deductBalanceAdmin = async (req, res) => {
         }
         if (user.status === "Disabled") {
             req.flash("error", "Card disabled");
-            return res.redirect("users/view");
+            return res.redirect("users/manage");
         }
         if (user.balance < newAmount) {
             req.flash("error", "Insufficient balance");
