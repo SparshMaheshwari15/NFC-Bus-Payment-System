@@ -14,7 +14,7 @@ const whatsappRoutes = require("./routes/whatsapp.js");
 const session = require("express-session");
 const flash = require("connect-flash");
 
-// const MongoStore = require("connect-mongo")
+const MongoStore = require("connect-mongo");
 
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -40,8 +40,10 @@ app.use(
         secret: process.env.SESSION_SECRET_KEY,
         resave: false,
         saveUninitialized: true,
-        // store: new MongoStore({ mongooseConnection: mongoose.connection }),
-        // cookie: { maxAge: 180 * 60 * 1000 }, // Set cookie expiration
+        store: MongoStore.create({
+            mongoUrl: process.env.LOCALDB_URL,
+        }),
+        cookie: { maxAge: 180 * 60 * 1000 }, // Set cookie expiration
     })
 );
 
@@ -72,6 +74,9 @@ app.use("/users", userRoutes);
 // Webhook to handle incoming WhatsApp messages
 // app.use("/whatsapp", twilio.webhook(), whatsappRoutes);
 
+app.get("/", (req, res) => {
+    res.redirect("users/view");
+});
 app.get("*", (req, res) => {
     res.render("error.ejs");
 });

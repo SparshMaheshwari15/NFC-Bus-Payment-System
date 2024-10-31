@@ -5,7 +5,7 @@ exports.deductBalanceBus = async (req, res) => {
     const token1 = req.headers["authorization1"];
     const token2 = req.headers["authorization2"];
     if (
-        token1 !== process.env.ESP32TOKEN ||
+        token1 !== process.env.ESP32TOKEN1 ||
         token2 !== process.env.ESP32TOKEN2
     ) {
         // Compare with your token
