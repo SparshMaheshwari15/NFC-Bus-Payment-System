@@ -9,8 +9,8 @@ exports.confirmPayment = async (req, res) => {
         payload.payment_link &&
         payload.payment_link.entity.status === "paid"
     ) {
-        if (isNaN(payload.payment_link.amount)) {
-            console.error("Invalid amount:", payload.payment_link.amount);
+        if (isNaN(payload.payment_link.entity.amount_paid)) {
+            console.error("Invalid amount:", payload.payment_link.entity.amount_paid);
             console.log("Amount is not a valid number");
             return res
                 .status(404)
@@ -26,7 +26,7 @@ exports.confirmPayment = async (req, res) => {
         }
 
         if (user) {
-            const amountPaid = parseInt(payload.payment_link.amount, 10) / 100; // Convert to ₹
+            const amountPaid = parseInt(payload.payment_link.entity.amount_paid, 10) / 100; // Convert to ₹
             user.balance += amountPaid;
             await user.save();
 
