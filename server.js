@@ -88,9 +88,9 @@ app.post("/webhook/razorpay", async (req, res) => {
     if (
         payload &&
         payload.payment_link &&
-        payload.payment_link.status === "paid"
+        payload.payment_link.entity.status === "paid"
     ) {
-        const phone = payload.payment_link.customer.contact;
+        const phone = payload.payment_link.entity.customer.contact;
         const user = await User.findOne({ phone });
 
         if (user) {

@@ -28,7 +28,11 @@ exports.sendMsg = async (req, res) => {
         } else {
             const twiml = new MessagingResponse();
             twiml.message(
-                "Please send 'transaction' to receive your last transaction details or send 'disable' to disable your card "
+`Please send 
+'transaction' to receive your last transaction details 
+'disable' to disable your card
+'top-up' to recharge your card
+`
             );
             res.writeHead(200, { "Content-Type": "text/xml" });
             res.end(twiml.toString());

@@ -121,9 +121,10 @@ async function toTopUp(fromNumber) {
     });
 
     twiml.message(
-        `Hello ${user.student_name}, click here to top up your account: ${paymentLink.short_url}.
-        Enter your registered mobile number on the payment portal
-        `
+    `Hello ${user.student_name}, 
+click here to top up your account: ${paymentLink.short_url}.
+Enter your registered mobile number on the payment portal
+`
     );
 
     // Send payment link via WhatsApp
