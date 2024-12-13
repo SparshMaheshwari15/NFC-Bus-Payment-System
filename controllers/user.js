@@ -139,7 +139,7 @@ exports.deleteUser = async (req, res) => {
 exports.driverLogin = async (req, res) => {
     try {
         const user = req.user;
-
+        // console.log(user);
         // Check if the user object exists
         if (!user) {
             return res.status(401).json({ message: "User not authenticated." });
@@ -151,7 +151,7 @@ exports.driverLogin = async (req, res) => {
 
         // Create a token payload
         const payload = {
-            userId: user.id,
+            userId: user._id,
             role: user.role,
         };
 
@@ -159,7 +159,7 @@ exports.driverLogin = async (req, res) => {
         const token = jwt.sign(payload, secretKey, { expiresIn: expireTime });
 
         // Send the token to the client
-        console.log("Log in success");
+        console.log("Log in success controller user");
         res.json({ token });
     } catch (error) {
         console.error("Error during token generation:", error);

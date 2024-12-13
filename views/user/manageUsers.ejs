@@ -41,6 +41,12 @@
                                 Delete
                             </button>
                         </form>
+                        <form action="/users/editUsers" method="GET" style="display:inline;">
+                            <input type="hidden" name="card_id" value="<%= user.card_id %>">
+                            <button type="submit" class="btn btn-danger ml-2">
+                                Edit
+                            </button>
+                        </form>
                     </td>
                 </tr>
             <% }) %>

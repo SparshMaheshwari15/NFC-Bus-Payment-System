@@ -21,16 +21,19 @@ module.exports.isAdmin = (req, res, next) => {
 };
 
 module.exports.isDriver = (req, res, next) => {
-    // console.log(req.user);
+    console.log(req.isAuthenticated());
+    console.log("here");
     if (!req.isAuthenticated()) {
-        req.session.redirectUrl = req.originalUrl;
-        req.flash("error", "You must be logged in");
-        return res.redirect("/users/login");
+        // req.session.redirectUrl = req.originalUrl;
+        // req.flash("error", "You must be logged in");
+        // return res.redirect("/users/login");
+        return res.status(401).json({ error: "Driver must be logged in" });
     }
     const userRole = req.user.role;
-    if (userRole !== "Drive") {
-        req.flash("error", "You are not a Drive");
-        return res.redirect("/users/login");
+    if (userRole !== "Driver") {
+        // req.flash("error", "You are not a Drive");
+        // return res.redirect("/users/login");
+        return res.status(401).json({ error: "You are not a Driver" });
     }
     next();
 };

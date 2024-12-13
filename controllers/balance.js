@@ -83,7 +83,8 @@ exports.deductBalanceBus = async (req, res) => {
 };
 
 exports.addBalance = async (req, res) => {
-    const { card_id, amount } = req.body;
+    let { card_id, amount } = req.body;
+    card_id = card_id.trim();
     try {
         const user = await User.findOne({ card_id });
         if (!user) {
