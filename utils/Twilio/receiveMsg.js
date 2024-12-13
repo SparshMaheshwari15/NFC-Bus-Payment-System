@@ -3,8 +3,8 @@ const User = require("../../models/user.js");
 const Razorpay = require("razorpay");
 // Razorpay instance
 const razorpay = new Razorpay({
-    key_id: "rzp_test_HRKWY7yoGAb5ER",
-    key_secret: "xQVxoEyS5gyRlMXWQSRErZCR",
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
 // Helper function to fetch user and handle errors

@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const { MessagingResponse } = require("twilio").twiml;
 
 exports.confirmPayment = async (req, res) => {
     const { payload } = req.body;
@@ -10,7 +11,10 @@ exports.confirmPayment = async (req, res) => {
         payload.payment_link.entity.status === "paid"
     ) {
         if (isNaN(payload.payment_link.entity.amount_paid)) {
-            console.error("Invalid amount:", payload.payment_link.entity.amount_paid);
+            console.error(
+                "Invalid amount:",
+                payload.payment_link.entity.amount_paid
+            );
             console.log("Amount is not a valid number");
             return res
                 .status(404)
@@ -26,7 +30,8 @@ exports.confirmPayment = async (req, res) => {
         }
 
         if (user) {
-            const amountPaid = parseInt(payload.payment_link.entity.amount_paid, 10) / 100; // Convert to ₹
+            const amountPaid =
+                parseInt(payload.payment_link.entity.amount_paid, 10) / 100; // Convert to ₹
             user.balance += amountPaid;
             await user.save();
 
@@ -37,6 +42,8 @@ exports.confirmPayment = async (req, res) => {
             //     body: `Your payment of ₹${amountPaid} was successful. Your new balance is ₹${user.balance}.`,
             // });
             console.log("Balance updated after payment");
+            const twiml = new MessagingResponse();
+            twiml.message("Balance updated after paymentt");
             return res.status(200).send("Balance updated after payment");
         } else {
             console.log("User not found in razorpay payment");
