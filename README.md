@@ -85,10 +85,10 @@ NFC-Bus-Payment-System/
 - **NFC Reader**: RC522 connected to an ESP32 microcontroller
 - **Validation**: Joi for request validation
 - **Frontend**: EJS (for rendering views)
+- **Messaging**: Twilio WhatsApp API
 <!--
 - **Payment Integration**: UPI for recharging student accounts
 -->
-- **Messaging**: Twilio WhatsApp API
 
 ## Contributing
 
