@@ -10,7 +10,8 @@ exports.confirmPayment = async (req, res) => {
         payload.payment_link.entity.status === "paid"
     ) {
         const phone = payload.payment_link.entity.customer.contact;
-        const user = await User.findOne({ phone });
+        const user = await User.findOne({ phone_number: phone });
+        console.log(user);
 
         if (user) {
             const amountPaid = payload.payment_link.amount / 100; // Convert to ₹
