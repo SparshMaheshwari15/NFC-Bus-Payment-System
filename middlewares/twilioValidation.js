@@ -1,6 +1,6 @@
 const twilio = require("twilio");
 
-const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN; // Replace with your actual Auth Token
+const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
 
 function validateTwilioRequest(req, res, next) {
     console.log("Inside validateTwilioRequest");

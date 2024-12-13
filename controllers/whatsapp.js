@@ -2,12 +2,13 @@ const { MessagingResponse } = require("twilio").twiml;
 const {
     sendLastTransactionDetails,
     toDisableCard,
+    toTopUp,
 } = require("../utils/Twilio/receiveMsg.js");
 
 exports.sendMsg = async (req, res) => {
     const receivedMessage = req.body.Body.trim(); // The message sent via WhatsApp
     let fromNumber = req.body.From; // User WhatsApp number
-
+    console.log("Here in send msg");
     // Remove the "whatsapp:" prefix
     fromNumber = fromNumber.replace("whatsapp:", "");
     try {
@@ -18,6 +19,10 @@ exports.sendMsg = async (req, res) => {
             res.end(twiml.toString());
         } else if (receivedMessage.toLowerCase() === "disable") {
             const twiml = await toDisableCard(fromNumber);
+            res.writeHead(200, { "Content-Type": "text/xml" });
+            res.end(twiml.toString());
+        } else if (receivedMessage.toLowerCase() === "top-up") {
+            const twiml = await toTopUp(fromNumber);
             res.writeHead(200, { "Content-Type": "text/xml" });
             res.end(twiml.toString());
         } else {
