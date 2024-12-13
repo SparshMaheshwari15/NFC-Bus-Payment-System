@@ -33,7 +33,7 @@ router.get("/users", getAllUsers);
 // Route to deduct balance
 router.post(
     "/users/deductBalanceBus",
-    isDriver,
+    // isDriver,
     authenticateJWT,
     deductBalanceBus
 );
