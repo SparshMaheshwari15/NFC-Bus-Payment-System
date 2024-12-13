@@ -21,6 +21,7 @@
     "express-session": "^1.18.1",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
+    "method-override": "^3.0.0",
     "mongodb": "^6.9.0",
     "mongoose": "^8.7.2",
     "passport": "^0.7.0",

@@ -35,13 +35,13 @@
                                 <%= user.status === 'Enabled' ? 'Disable' : 'Enable' %>
                             </button>
                         </form>
-                        <form action="/api/users/delete" method="POST" style="display:inline;">
+                        <form action="/api/users?_method=DELETE" method="POST" style="display:inline;">
                             <input type="hidden" name="card_id" value="<%= user.card_id %>">
                             <button type="submit" class="btn btn-danger ml-2" onclick="return confirm('Are you sure you want to delete this user?');">
                                 Delete
                             </button>
                         </form>
-                        <form action="/users/editUsers" method="GET" style="display:inline;">
+                        <form action="/api/users?_method=PATCH" method="POST" style="display:inline;">
                             <input type="hidden" name="card_id" value="<%= user.card_id %>">
                             <button type="submit" class="btn btn-danger ml-2">
                                 Edit

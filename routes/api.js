@@ -8,6 +8,7 @@ const {
     driverLogin,
     userLogin,
     logout,
+    updateUser,
 } = require("../controllers/user.js");
 
 const {
@@ -43,7 +44,8 @@ router.post("/users/addBalance", isAdmin, addBalance);
 router.post("/users/addUser", isAdmin, validateUser, addUser);
 router.post("/users/deductBalanceAdmin", isAdmin, deductBalanceAdmin);
 router.post("/users/manage/toggle", isAdmin, toggleUserStatus);
-router.post("/users/delete", isAdmin, deleteUser);
+router.delete("/users", isAdmin, deleteUser);
+router.patch("/users", isAdmin, updateUser);
 router.post("/users/login/driver", authenticateDriver, driverLogin);
 router.post("/users/signup", isAdmin, registerUser);
 

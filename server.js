@@ -7,6 +7,8 @@ const app = express();
 const mongoose = require("mongoose");
 const connectDb = require("./dbConnection.js");
 
+const methodOverride = require('method-override');
+
 const apiRoutes = require("./routes/api.js");
 const userRoutes = require("./routes/user.js");
 const whatsappRoutes = require("./routes/whatsapp.js");
@@ -64,6 +66,10 @@ app.use((req, res, next) => {
     res.locals.currUser = req.user;
     next();
 });
+
+// Use method-override
+app.use(methodOverride('_method'));
+
 // app.get("/testing", (req, res) => {
 //     res.send(res.locals.currUser);
 //     console.log(res.locals.currUser);

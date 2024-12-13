@@ -136,6 +136,27 @@ exports.deleteUser = async (req, res) => {
     }
 };
 
+exports.updateUser = async (req, res) => {
+    const { card_id } = req.body;
+    try {
+        // Check if the user is protected
+        const user = await ProtectedCard.findOne({ card_id });
+        if (user) {
+            req.flash(
+                "error",
+                "This user cannot be updated it is a protected card."
+            );
+        } else {
+            req.flash("success", "Working");
+        }
+        return res.redirect("/users/manage");
+    } catch (error) {
+        console.error("Error updating user:", error);
+        req.flash("error", "Internal Server Error (Update User)");
+        return res.redirect("/users/view");
+    }
+};
+
 exports.driverLogin = async (req, res) => {
     try {
         const user = req.user;
