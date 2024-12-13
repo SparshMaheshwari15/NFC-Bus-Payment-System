@@ -99,6 +99,7 @@ async function toTopUp(fromNumber) {
     console.log("In toTopUp");
     const twiml = new MessagingResponse();
     const { user, errorMessage } = await fetchUser(fromNumber);
+    console.log("here");
     if (errorMessage) {
         twiml.message(errorMessage);
         return twiml;
@@ -116,12 +117,13 @@ async function toTopUp(fromNumber) {
             sms: false,
             email: false,
         },
-        callback_url: "https://nfc-bus-payment-system.onrender.com/webhook/razorpay",
+        // callback_url: "https://nfc-bus-payment-system.onrender.com/webhook/razorpay",
+        callback_url: "https://localhost:3000/webhook/razorpay",
         callback_method: "get",
     });
 
     twiml.message(
-    `Hello ${user.student_name}, 
+        `Hello ${user.student_name}, 
 click here to top up your account: ${paymentLink.short_url}.
 Enter your registered mobile number on the payment portal
 `

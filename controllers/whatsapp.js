@@ -39,6 +39,7 @@ exports.sendMsg = async (req, res) => {
         }
     } catch (error) {
         console.error("Error in Twilio webhook:", error);
+        const twiml = new MessagingResponse();
         twiml.message(
             "An error occurred while processing your request. Please try again later."
         );

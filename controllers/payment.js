@@ -9,12 +9,24 @@ exports.confirmPayment = async (req, res) => {
         payload.payment_link &&
         payload.payment_link.entity.status === "paid"
     ) {
+        if (isNaN(payload.payment_link.amount)) {
+            console.error("Invalid amount:", payload.payment_link.amount);
+            console.log("Amount is not a valid number");
+            return res
+                .status(404)
+                .json({ message: "Amount is not a valid number" });
+        }
         const phone = payload.payment_link.entity.customer.contact;
         const user = await User.findOne({ phone_number: phone });
         console.log(user);
 
+        if (!user) {
+            console.log("User not found");
+            return res.status(404).json({ message: "User not found" });
+        }
+
         if (user) {
-            const amountPaid = payload.payment_link.amount / 100; // Convert to ₹
+            const amountPaid = parseInt(payload.payment_link.amount, 10) / 100; // Convert to ₹
             user.balance += amountPaid;
             await user.save();
 
@@ -25,13 +37,13 @@ exports.confirmPayment = async (req, res) => {
             //     body: `Your payment of ₹${amountPaid} was successful. Your new balance is ₹${user.balance}.`,
             // });
             console.log("Balance updated after payment");
-            res.status(200).send("Balance updated after payment");
+            return res.status(200).send("Balance updated after payment");
         } else {
             console.log("User not found in razorpay payment");
-            res.status(404).send("User not found in razorpay payment");
+            return res.status(404).send("User not found in razorpay payment");
         }
     } else {
         console.log("Payment not confirmed");
-        res.status(400).send("Payment not confirmed");
+        return res.status(400).send("Payment not confirmed");
     }
 };
