@@ -1,14 +1,10 @@
 const express = require("express");
-const {
-    renderUsersPage,
-    renderManageUser,
-    userLogin,
-} = require("../controllers/user");
+const userController = require("../controllers/user");
 const { isAdmin } = require("../middlewares/auth");
 const router = express.Router();
 
 // Route to render the EJS page with users
-router.get("/view", isAdmin, renderUsersPage);
+router.get("/view", isAdmin, userController.renderUsersPage);
 
 // Render the add balance form page
 router.get("/addBalance", isAdmin, (req, res) => {
@@ -25,7 +21,7 @@ router.get("/deductBalanceAdmin", isAdmin, (req, res) => {
     res.render("balance/deductBalanceAdmin.ejs");
 });
 
-router.get("/manage", isAdmin, renderManageUser);
+router.get("/manage", isAdmin, userController.renderManageUser);
 
 // Render the signup page
 router.get("/signup", isAdmin, (req, res) => {
