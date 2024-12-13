@@ -11,7 +11,7 @@ const methodOverride = require("method-override");
 
 const apiRoutes = require("./routes/api.js");
 const userRoutes = require("./routes/user.js");
-const whatsappRoutes = require("./routes/whatsapp.js");
+const webhookRoutes = require("./routes/webhook.js");
 
 const session = require("express-session");
 const flash = require("connect-flash");
@@ -23,8 +23,6 @@ const LocalStrategy = require("passport-local");
 const Account = require("./models/account.js");
 
 const bodyParser = require("body-parser");
-const twilio = require("twilio");
-const { isAdmin } = require("./middlewares/auth.js");
 
 // Set up the EJS view engine
 app.set("view engine", "ejs");
@@ -79,42 +77,8 @@ app.use("/users", userRoutes);
 
 // Webhook to handle incoming WhatsApp messages
 // app.use("/whatsapp", twilio.webhook(), whatsappRoutes);
-app.use("/whatsapp", whatsappRoutes);
 
-app.post("/webhook/razorpay", async (req, res) => {
-    const { payload } = req.body;
-    console.log("In Webhook razorpay");
-    console.log(payload);
-    if (
-        payload &&
-        payload.payment_link &&
-        payload.payment_link.entity.status === "paid"
-    ) {
-        const phone = payload.payment_link.entity.customer.contact;
-        const user = await User.findOne({ phone });
-
-        if (user) {
-            const amountPaid = payload.payment_link.amount / 100; // Convert to ₹
-            user.balance += amountPaid;
-            await user.save();
-
-            // Send WhatsApp confirmation
-            // await axios.post("https://api.twilio.com/your-api-endpoint", {
-
-            //     to: `whatsapp:${phone}`,
-            //     body: `Your payment of ₹${amountPaid} was successful. Your new balance is ₹${user.balance}.`,
-            // });
-            console.log("Balance updated after payment");
-            res.status(200).send("Balance updated after payment");
-        } else {
-            console.log("User not found in razorpay payment");
-            res.status(404).send("User not found in razorpay payment");
-        }
-    } else {
-        console.log("Payment not confirmed");
-        res.status(400).send("Payment not confirmed");
-    }
-});
+app.use("/webhook", webhookRoutes);
 
 app.get("/", (req, res) => {
     res.redirect("users/view");
