@@ -96,10 +96,8 @@ async function toDisableCard(fromNumber) {
 
 // Function to top-up card
 async function toTopUp(fromNumber) {
-    console.log("In toTopUp");
     const twiml = new MessagingResponse();
     const { user, errorMessage } = await fetchUser(fromNumber);
-    console.log("here");
     if (errorMessage) {
         twiml.message(errorMessage);
         return twiml;

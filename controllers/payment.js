@@ -3,8 +3,6 @@ const sendWhatsAppMessage = require("../utils/Twilio/twilioClient");
 
 exports.confirmPayment = async (req, res) => {
     const { payload } = req.body;
-    console.log("In Webhook razorpay");
-    // console.log(payload);
     if (
         payload &&
         payload.payment_link &&
@@ -15,7 +13,6 @@ exports.confirmPayment = async (req, res) => {
                 "Invalid amount:",
                 payload.payment_link.entity.amount_paid
             );
-            console.log("Amount is not a valid number");
             return res
                 .status(404)
                 .json({ message: "Amount is not a valid number" });
@@ -25,7 +22,6 @@ exports.confirmPayment = async (req, res) => {
         console.log(user);
 
         if (!user) {
-            console.log("User not found");
             return res.status(404).json({ message: "User not found" });
         }
 
@@ -41,7 +37,6 @@ exports.confirmPayment = async (req, res) => {
             //     to: `whatsapp:${phone}`,
             //     body: `Your payment of ₹${amountPaid} was successful. Your new balance is ₹${user.balance}.`,
             // });
-            console.log("Balance updated after payment");
             const msg = `Hello ${user.student_name}(${user.student_id})
 Your payment of ₹${amountPaid} is successfull
 Updated balance is ₹${user.balance}

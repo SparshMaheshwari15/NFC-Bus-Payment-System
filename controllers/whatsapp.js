@@ -8,7 +8,6 @@ const {
 exports.sendMsg = async (req, res) => {
     const receivedMessage = req.body.Body.trim(); // The message sent via WhatsApp
     let fromNumber = req.body.From; // User WhatsApp number
-    console.log("Here in send msg");
     // Remove the "whatsapp:" prefix
     fromNumber = fromNumber.replace("whatsapp:", "");
     try {
