@@ -70,7 +70,7 @@ exports.deductBalanceBus = async (req, res) => {
                 `- Transaction Time: ${transactionTime}\n\n` +
                 `Thank you for using the service!`;
 
-            // sendWhatsAppMessage(user.phone_number, msg);
+            sendWhatsAppMessage(user.phone_number, msg);
         }
         if (user.balance < 20) {
             user.status = "Disabled";

@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const { MessagingResponse } = require("twilio").twiml;
+const sendWhatsAppMessage = require("../utils/Twilio/twilioClient");
 
 exports.confirmPayment = async (req, res) => {
     const { payload } = req.body;
@@ -42,8 +42,11 @@ exports.confirmPayment = async (req, res) => {
             //     body: `Your payment of ₹${amountPaid} was successful. Your new balance is ₹${user.balance}.`,
             // });
             console.log("Balance updated after payment");
-            const twiml = new MessagingResponse();
-            twiml.message("Balance updated after paymentt");
+            const msg = `Hello ${user.student_name}(${user.student_id})
+Your payment of ₹${amountPaid} is successfull
+Updated balance is ₹${user.balance}
+`;
+            sendWhatsAppMessage(phone, msg);
             return res.status(200).send("Balance updated after payment");
         } else {
             console.log("User not found in razorpay payment");
