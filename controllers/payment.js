@@ -47,16 +47,7 @@ Updated balance is ₹${user.balance}
             console.log("User not found in razorpay payment");
             return res.status(404).send("User not found in razorpay payment");
         }
-    } else {
-        const phone = payload.payment_link.entity.customer.contact;
-        const user = await User.findOne({ phone_number: phone });
-        let msg = `Hello ${user.student_name}(${user.student_id})
-Your payment of is unsuccessfull
-Your balance is ₹${user.balance}
-Try again with a new link
-`;
-            sendWhatsAppMessage(phone, msg);
-            
+    } else {            
         console.log("Payment not confirmed");
         return res.status(400).send("Payment not confirmed");
     }
