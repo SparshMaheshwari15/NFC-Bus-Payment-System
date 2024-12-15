@@ -80,6 +80,15 @@ app.use("/users", userRoutes);
 
 app.use("/webhook", webhookRoutes);
 
+app.get("/payment/success", (req, res) => {
+    res.render("payment/success.ejs");
+});
+
+app.get("/payment/failure", (req, res) => {
+    res.render("payment/failure.ejs");
+});
+
+
 app.get("/", (req, res) => {
     res.redirect("users/view");
 });

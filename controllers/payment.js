@@ -20,7 +20,6 @@ exports.confirmPayment = async (req, res) => {
         }
         const phone = payload.payment_link.entity.customer.contact;
         const user = await User.findOne({ phone_number: phone });
-        console.log(user);
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });
@@ -37,9 +36,9 @@ exports.confirmPayment = async (req, res) => {
 Your payment of ₹${amountPaid} is successfull
 Updated balance is ₹${user.balance}
 `;
-            console.log("Balance updated after payment");
             sendWhatsAppMessage(phone, msg);
-            return res.status(200).send("Balance updated after payment");
+            // return res.status(200).send("Balance updated after payment");
+            res.redirect("payment/success");
         } else {
             console.log("User not found in razorpay payment");
             return res.status(404).send("User not found in razorpay payment");
