@@ -29,7 +29,7 @@ router.get("/status", async (req, res) => {
     //     }
 
     // Redirect to the success page
-    res.redirect("payment/success");
+    return res.render("payment/success");
     // } catch (error) {
     //     console.error("Error verifying payment:", error);
     //     return res.redirect("/payment/failed");

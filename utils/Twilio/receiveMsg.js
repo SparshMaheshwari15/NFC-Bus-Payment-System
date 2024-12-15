@@ -116,7 +116,7 @@ async function toTopUp(fromNumber) {
             email: false,
         },
         callback_url: "https://nfc-bus-payment-system.onrender.com/payment/status",
-        // callback_url: "localhost:3000/payment/status",
+        // callback_url: "http://localhost:3000/payment/status",
         callback_method: "get",
     });
 
