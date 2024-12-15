@@ -74,6 +74,10 @@ exports.deductBalanceBus = async (req, res) => {
         }
         if (user.balance < 20) {
             user.status = "Disabled";
+            const msg = `Hello ${user.student_name} (${user.student_id}),
+Your account balance is low: ₹${user.balance}.
+Please top-up to continue using the service.`;
+            sendWhatsAppMessage(user.phone_number, msg);
         }
         await user.save(); // Save the updated user
     } catch (error) {

@@ -1,9 +1,6 @@
 # NFC Bus Payment System
 
-This project is a smart bus payment system that utilizes **NFC cards** to manage bus fares for students. The system consists of an NFC reader(**RC522**) that scans students' NFC cards, deducts fare from their account balance.The system also has features to block NFC cards to prevent misuse.
-
-
-<!--and sends notifications when the balance is low or money is deducted.--> 
+This project is a smart bus payment system that utilizes **NFC cards** to manage bus fares for students. The system consists of an NFC reader(**RC522**) that scans students' NFC cards, deducts fare from their account balance.The system also has features to block NFC cards to prevent misuse,and sends notifications when the balance is low or money is deducted.
 
 ## Features
 
@@ -12,10 +9,8 @@ This project is a smart bus payment system that utilizes **NFC cards** to manage
 - **Payment Processing**: Automatically deducts the fare from the student's account after scanning the NFC card.
 - **Balance Notifications**: Sends a WhatsApp notification to students after a payment is made.
 - **Card Blocking**: Allows admins to block cards to prevent misuse.
-<!--
-- **User Authentication**: Secure login system for admins and users.
-- **UPI Payments**: Integrates UPI payments for bus fare top-up.
--->
+- **User Authentication**: Secure login system for admins.
+- **Online Payments**: Integrates Razorpay for payments card top-up.
 
 ## Table of Contents
 
@@ -86,9 +81,7 @@ NFC-Bus-Payment-System/
 - **Validation**: Joi for request validation
 - **Frontend**: EJS (for rendering views)
 - **Messaging**: Twilio WhatsApp API
-<!--
-- **Payment Integration**: UPI for recharging student accounts
--->
+- **Payment Integration**: Razropay for recharging student accounts
 
 ## Contributing
 
