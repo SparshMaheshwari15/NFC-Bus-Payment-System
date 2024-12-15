@@ -115,8 +115,8 @@ async function toTopUp(fromNumber) {
             sms: true,
             email: false,
         },
-        callback_url: "https://nfc-bus-payment-system.onrender.com/webhook/razorpay",
-        // callback_url: "https://localhost:3000/webhook/razorpay",
+        callback_url: "https://nfc-bus-payment-system.onrender.com/payment/status",
+        // callback_url: "localhost:3000/payment/status",
         callback_method: "get",
     });
 

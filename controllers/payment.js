@@ -37,8 +37,7 @@ Your payment of ₹${amountPaid} is successfull
 Updated balance is ₹${user.balance}
 `;
             sendWhatsAppMessage(phone, msg);
-            // return res.status(200).send("Balance updated after payment");
-            res.redirect("payment/success");
+            res.status(200).send("Balance updated after payment");
         } else {
             console.log("User not found in razorpay payment");
             return res.status(404).send("User not found in razorpay payment");
