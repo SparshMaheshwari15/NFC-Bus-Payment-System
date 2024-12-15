@@ -112,7 +112,7 @@ async function toTopUp(fromNumber) {
             contact: user.phone_number,
         },
         notify: {
-            sms: true,
+            sms: false,
             email: false,
         },
         callback_url: "https://nfc-bus-payment-system.onrender.com/payment/status",
