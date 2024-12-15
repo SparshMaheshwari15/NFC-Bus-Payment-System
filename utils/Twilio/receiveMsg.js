@@ -112,7 +112,7 @@ async function toTopUp(fromNumber) {
             contact: user.phone_number,
         },
         notify: {
-            sms: false,
+            sms: true,
             email: false,
         },
         callback_url: "https://nfc-bus-payment-system.onrender.com/webhook/razorpay",
@@ -126,13 +126,6 @@ click here to top up your account: ${paymentLink.short_url}.
 Enter your registered mobile number on the payment portal
 `
     );
-
-    // Send payment link via WhatsApp
-
-    // await axios.post("https://api.twilio.com/your-api-endpoint", {
-    //     to: `whatsapp:${userPhone}`,
-    //     body: `Hello ${user.name}, click here to top up your account: ${paymentLink.short_url}`,
-    // });
 
     console.log("Payment link sent");
 
