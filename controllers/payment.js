@@ -3,7 +3,7 @@ const sendWhatsAppMessage = require("../utils/Twilio/twilioClient");
 
 exports.confirmPayment = async (req, res) => {
     const { payload } = req.body;
-    console.log(payload);
+    // console.log(payload);
     if (
         payload &&
         payload.payment_link &&
