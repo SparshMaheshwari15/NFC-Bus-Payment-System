@@ -38,6 +38,13 @@ const userSchema = new Schema({
         // unique: true,
         default: "+919811890414",
     },
+    last_top_up_date: {
+        type: Date,
+        default: new Date(),
+    },
+    last_top_up_amount: {
+        type: Number,
+    },
 });
 
 const User = mongoose.model("User", userSchema);

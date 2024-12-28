@@ -54,6 +54,9 @@
                         <a class="nav-link" href="/users/manage" style="font-weight: 500;">Manage Users</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="/users/topup" style="font-weight: 500;">Top Up history</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/users/signup" style="font-weight: 500;">Sign Up</a>
                     </li>
                     <%if(!currUser){%>
@@ -69,7 +72,7 @@
                                     <a class="nav-link" href="/api/users/logout" style="font-weight: 500;">Logout</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" style="font-weight: 500;"> <b>logged in <%=currUser.username%> </b> </a>
+                                    <a class="nav-link" style="font-weight: 500;"> <b> <%=currUser.username%> </b> </a>
                                 </li>
                                 <%}%>
                 </ul>

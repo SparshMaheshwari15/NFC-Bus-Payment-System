@@ -22,6 +22,7 @@ router.get("/deductBalanceAdmin", isAdmin, (req, res) => {
 });
 
 router.get("/manage", isAdmin, userController.renderManageUser);
+router.get("/topup", isAdmin, userController.renderTopUpHistory);
 
 // Render the signup page
 router.get("/signup", isAdmin, (req, res) => {

@@ -221,3 +221,14 @@ module.exports.logout = (req, res, next) => {
         res.redirect("/users/view");
     });
 };
+
+module.exports.renderTopUpHistory=async(req,res)=>{
+    try {
+        const users = await User.find(); // Fetch all users
+        res.render("user/topUpHistory", { users }); // Render the page with user data
+    } catch (error) {
+        console.error("Error fetching users top-up history:", error);
+        req.flash("error", "Unable to fetch users top-up history");
+        res.redirect("/users/view");
+    }
+}

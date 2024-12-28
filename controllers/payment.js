@@ -29,6 +29,8 @@ exports.confirmPayment = async (req, res) => {
             const amountPaid =
                 parseInt(payload.payment_link.entity.amount_paid, 10) / 100; // Convert to ₹
             user.balance += amountPaid;
+            user.last_top_up_date = new Date();
+            user.last_top_up_amount = amountPaid;
             await user.save();
 
             // Send WhatsApp confirmation
