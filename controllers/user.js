@@ -180,7 +180,7 @@ exports.driverLogin = async (req, res) => {
         const token = jwt.sign(payload, secretKey, { expiresIn: expireTime });
 
         // Send the token to the client
-        console.log("Log in success controller user");
+        console.log("Driver login success");
         res.json({ token });
     } catch (error) {
         console.error("Error during token generation:", error);

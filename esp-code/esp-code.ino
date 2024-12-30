@@ -180,7 +180,7 @@ void sendLoginRequest() {
     http.addHeader("Content-Type", "application/json");
 
     // Create the JSON payload with username and password
-    String requestBody = "{\"username\":\"abcd\",\"password\":\"abcd\"}";
+    String requestBody = "{\"username\":\"" + String(driverLoginId) + "\",\"password\":\"" + String(driverLoginPass) + "\"}";
 
     // Send the POST request with the payload
     int httpResponseCode = http.POST(requestBody);

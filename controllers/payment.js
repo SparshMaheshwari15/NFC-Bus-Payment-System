@@ -46,7 +46,7 @@ Updated balance is ₹${user.balance}
             return res.status(404).send("User not found in razorpay payment");
         }
     } else {
-        console.log("Payment not confirmed");
+        // console.log("Payment not confirmed");
         return res.status(400).send("Payment not confirmedd");
     }
 };
