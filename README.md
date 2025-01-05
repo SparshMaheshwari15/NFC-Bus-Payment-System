@@ -42,6 +42,16 @@ Click [here](https://youtu.be/eXRPwoK-tuY) to view the demo video.
    ```bash
    MONGODB_URI=<your-mongodb-connection-string>
    ESP32TOKEN=<Your secret token for esp32 auth>
+   PORT=3000
+   MIN_TIME_BETWEEN_TRANSACTION=120000
+   TWILIO_ACCOUNT_SID=<your-twilio-account-sid>
+   TWILIO_AUTH_TOKEN=<you-twilio-auth-token>
+   TWILIO_WHATSAPP_NUMBER=<your-twilio-whatsapp-number>
+   JWT_SECRET_KEY=<you-jwt-secret>
+   SESSION_SECRET_KEY=<you-session-secret-key>
+   RAZORPAY_KEY_ID=<your-razorpay-key-id>
+   RAZORPAY_KEY_SECRET=<your-razorpay-key-secret>
+   RAZORPAY_WEBHOOK_SECRET=<your-razorpay-webhook-secret>
    ```
 4. **Run the application**:
    ```bash
