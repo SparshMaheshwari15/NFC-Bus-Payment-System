@@ -34,9 +34,8 @@ const userSchema = new Schema({
     },
     phone_number: {
         type: String,
-        // required: true,
-        // unique: true,
-        default: "+919811890414",
+        required: true,
+        unique: true,
     },
     last_top_up_date: {
         type: Date,
