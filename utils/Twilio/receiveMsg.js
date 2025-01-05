@@ -107,7 +107,7 @@ async function toTopUp(fromNumber) {
     const paymentLink = await razorpay.paymentLink.create({
         amount: 10000, // Amount in paise (₹100)
         currency: "INR",
-        description: `Top-up for ${user.student_name}`,
+        description: `Top-up for ${user.student_id}`,
         customer: {
             contact: user.phone_number,
         },
