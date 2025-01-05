@@ -2,6 +2,7 @@
 
 This project is a smart bus payment system that utilizes **NFC cards** to manage bus fares for students. The system consists of an NFC reader(**RC522**) that scans students' NFC cards, deducts fare from their account balance.The system also has features to block NFC cards to prevent misuse,and sends notifications when the balance is low or money is deducted.
 
+**Demo Video**: https://youtu.be/eXRPwoK-tuY
 ## Features
 
 - **NFC Card Scanning**: Uses the RC522 NFC reader to read card data.
