@@ -102,6 +102,18 @@ async function toTopUp(fromNumber) {
         twiml.message(errorMessage);
         return twiml;
     }
+    if (user.balance > 400) {
+        twiml.message(
+            "Too much balance can't add more"
+        )
+        return twiml;
+    }
+    if (user.status === "Disabled") {
+        twiml.message(
+            "Card is disabled"
+        )
+        return twiml;
+    }
 
     // Generate Razorpay payment link
     const paymentLink = await razorpay.paymentLink.create({
@@ -115,7 +127,7 @@ async function toTopUp(fromNumber) {
             sms: false,
             email: false,
         },
-        callback_url: "https://nfc-bus-payment-system.onrender.com/payment/status",
+        callback_url: process.env.CALLBACK_URL,
         // callback_url: "http://localhost:3000/payment/status",
         callback_method: "get",
     });
