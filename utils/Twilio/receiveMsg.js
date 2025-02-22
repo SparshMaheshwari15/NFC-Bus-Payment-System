@@ -139,7 +139,7 @@ Enter your registered mobile number on the payment portal
 `
     );
 
-    console.log("Payment link sent");
+    // console.log("Payment link sent");
 
     return twiml;
 }

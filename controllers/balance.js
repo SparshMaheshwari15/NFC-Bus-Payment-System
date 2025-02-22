@@ -127,8 +127,9 @@ exports.addBalance = async (req, res) => {
 };
 
 exports.deductBalanceAdmin = async (req, res) => {
-    const { card_id, amount } = req.body;
+    let { card_id, amount } = req.body;
     const newAmount = Number(amount);
+    card_id = card_id.trim();
     if (newAmount < 0) {
         req.flash("error", "Number can't be negative");
         return res.redirect("users/deductBalance");
