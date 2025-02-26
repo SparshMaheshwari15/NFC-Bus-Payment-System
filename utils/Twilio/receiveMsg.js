@@ -104,13 +104,19 @@ async function toTopUp(fromNumber) {
     }
     if (user.balance > 400) {
         twiml.message(
-            "Too much balance can't add more"
+            `Hello ${user.name}(${user.student_id})
+Currenlty your balance is ${user.balance}
+Too much balance can't add more`
+            
         )
         return twiml;
     }
     if (user.status === "Disabled") {
         twiml.message(
-            "Card is disabled"
+            `Hello ${user.name}(${user.student_id})
+Your card is disabled
+Contact the administrator to enable your card then try again`
+            
         )
         return twiml;
     }
