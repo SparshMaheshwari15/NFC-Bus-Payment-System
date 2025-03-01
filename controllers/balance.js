@@ -30,19 +30,25 @@ exports.deductBalanceBus = async (req, res) => {
             return res.status(400).json({ error: "Insufficient balance" });
         } else if (
             user.last_transaction &&
-            now - user.last_transaction < MIN_TIME_BETWEEN_TRANSACTION
+            user.last_transactions.length > 0 &&
+            now - user.last_transactions[user.last_transactions.length - 1].date < MIN_TIME_BETWEEN_TRANSACTION
         ) {
             return res
                 .status(429)
                 .json({ error: "Card used recently. Try again later." });
         } else {
             user.balance -= amount; // Deduct the balance
-            user.last_transaction = now;
+            // user.last_transaction = now;
+            // Push the new transaction into the last_transactions array
+            user.last_transactions.push({
+                date: now,
+                amount: amount,
+            });
             res.json({
                 success: "Balance deducted successfully",
                 new_balance: user.balance,
             });
-            const transactionDate = user.last_transaction.toLocaleDateString(
+            const transactionDate = user.last_transactions[user.last_transactions.length - 1].date.toLocaleDateString(
                 "en-US",
                 {
                     weekday: "short",
@@ -52,7 +58,7 @@ exports.deductBalanceBus = async (req, res) => {
                 }
             );
 
-            const transactionTime = user.last_transaction.toLocaleTimeString(
+            const transactionTime = user.last_transactions[user.last_transactions.length - 1].date.toLocaleTimeString(
                 "en-US",
                 {
                     hour: "2-digit",
@@ -70,14 +76,15 @@ exports.deductBalanceBus = async (req, res) => {
                 `- Transaction Time: ${transactionTime}\n\n` +
                 `Thank you for using the service!`;
 
-            sendWhatsAppMessage(user.phone_number, msg);
+            // sendWhatsAppMessage(user.phone_number, msg);
         }
-        if (user.balance < 20) {
+        if (user.balance <= 20) {
             user.status = "Disabled";
-            const msg = `Hello ${user.student_name} (${user.student_id}),
+            const msg2 = `Hello ${user.student_name} (${user.student_id}),
 Your account balance is low: ₹${user.balance}.
 Please top-up to continue using the service.`;
-            sendWhatsAppMessage(user.phone_number, msg);
+            console.log("Sending low balance alert");
+            // sendWhatsAppMessage(user.phone_number, msg2);
         }
         await user.save(); // Save the updated user
     } catch (error) {
