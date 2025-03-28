@@ -37,36 +37,39 @@ async function sendLastTransactionDetails(fromNumber) {
         return twiml;
     }
 
-    if (!user.last_transaction) {
+    if (!user.last_transactions || user.last_transactions.length === 0) {
         twiml.message(
             "We couldn't find any transaction history for your account."
         );
     } else {
         // Format the last transaction details
-        const transactionDate = user.last_transaction.toLocaleDateString(
-            "en-US",
-            {
+        let msg = `Hello ${user.student_name}, here is your last 5 transaction history:\n\n`;
+        user.last_transactions.forEach((transaction, index) => {
+            const transactionDate = new Date(transaction.date).toLocaleDateString("en-US", {
                 weekday: "short",
                 year: "numeric",
                 month: "short",
                 day: "numeric",
-            }
-        );
-        const transactionTime = user.last_transaction.toLocaleTimeString(
-            "en-US",
-            {
+            });
+
+            const transactionTime = new Date(transaction.date).toLocaleTimeString("en-US", {
                 hour: "2-digit",
                 minute: "2-digit",
                 second: "2-digit",
                 hour12: false,
-            }
-        );
+            });
 
-        const msg = `Hello ${user.student_name}, here are your last transaction details:
-- Registration Number: ${user.student_id}
-- Remaining Balance: ₹${user.balance}
-- Transaction Date: ${transactionDate}
-- Transaction Time: ${transactionTime}`;
+            msg += `**Transaction ${index + 1}**\n`;
+            msg += `- Amount: ₹${transaction.amount}\n`;
+            msg += `- Date: ${transactionDate}\n`;
+            msg += `- Time: ${transactionTime}\n\n`;
+        });
+
+        //         const msg = `Hello ${user.student_name}, here are your last transaction details:
+        // - Registration Number: ${user.student_id}
+        // - Remaining Balance: ₹${user.balance}
+        // - Transaction Date: ${transactionDate}
+        // - Transaction Time: ${transactionTime}`;
 
         twiml.message(msg);
     }
