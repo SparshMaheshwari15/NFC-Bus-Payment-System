@@ -110,7 +110,7 @@ async function toTopUp(fromNumber) {
             `Hello ${user.student_name}(${user.student_id})
 Currently your balance is ${user.balance}
 Too much balance can't add more`
-            
+
         )
         return twiml;
     }
@@ -119,7 +119,7 @@ Too much balance can't add more`
             `Hello ${user.student_name}(${user.student_id})
 Your card is disabled
 Contact the administrator to enable your card then try again`
-            
+
         )
         return twiml;
     }
