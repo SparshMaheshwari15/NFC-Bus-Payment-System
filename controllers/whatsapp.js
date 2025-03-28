@@ -32,7 +32,7 @@ exports.sendMsg = async (req, res) => {
         } else {
             const twiml = new MessagingResponse();
             twiml.message(
-`Please send 
+                `Please send 
 'transaction' to receive your last 5 transaction details 
 'disable' to disable your card
 'top-up' to recharge your card
