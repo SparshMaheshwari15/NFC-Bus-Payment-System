@@ -3,6 +3,7 @@ const {
     sendLastTransactionDetails,
     toDisableCard,
     toTopUp,
+    sendLastTopupDetails,
 } = require("../utils/Twilio/receiveMsg.js");
 
 exports.sendMsg = async (req, res) => {
@@ -24,13 +25,19 @@ exports.sendMsg = async (req, res) => {
             const twiml = await toTopUp(fromNumber);
             res.writeHead(200, { "Content-Type": "text/xml" });
             res.end(twiml.toString());
+        } else if (receivedMessage.toLowerCase() === "top-up history") {
+            const twiml = await sendLastTopupDetails(fromNumber);
+            res.writeHead(200, { "Content-Type": "text/xml" });
+            res.end(twiml.toString());
         } else {
             const twiml = new MessagingResponse();
             twiml.message(
 `Please send 
-'transaction' to receive your last transaction details 
+'transaction' to receive your last 5 transaction details 
 'disable' to disable your card
 'top-up' to recharge your card
+'top-up history' to receive your last 5 top-up details
+
 `
             );
             res.writeHead(200, { "Content-Type": "text/xml" });
