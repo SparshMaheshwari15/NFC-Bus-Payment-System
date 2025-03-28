@@ -70,7 +70,7 @@ async function sendLastTransactionDetails(fromNumber) {
         // - Remaining Balance: ₹${user.balance}
         // - Transaction Date: ${transactionDate}
         // - Transaction Time: ${transactionTime}`;
-
+        msg += `Current balance: ${user.balance}\n`;
         twiml.message(msg);
     }
 
