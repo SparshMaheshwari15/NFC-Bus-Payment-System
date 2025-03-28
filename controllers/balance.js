@@ -76,7 +76,7 @@ exports.deductBalanceBus = async (req, res) => {
                 `- Transaction Time: ${transactionTime}\n\n` +
                 `Thank you for using the service!`;
 
-            // sendWhatsAppMessage(user.phone_number, msg);
+            sendWhatsAppMessage(user.phone_number, msg);
         }
         if (user.balance <= 20) {
             user.status = "Disabled";
@@ -84,7 +84,7 @@ exports.deductBalanceBus = async (req, res) => {
 Your account balance is low: ₹${user.balance}.
 Please top-up to continue using the service.`;
             console.log("Sending low balance alert");
-            // sendWhatsAppMessage(user.phone_number, msg2);
+            sendWhatsAppMessage(user.phone_number, msg2);
         }
         await user.save(); // Save the updated user
     } catch (error) {
