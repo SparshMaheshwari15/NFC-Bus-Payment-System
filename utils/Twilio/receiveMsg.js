@@ -59,7 +59,7 @@ async function sendLastTransactionDetails(fromNumber) {
                 hour12: false,
             });
 
-            msg += `**Transaction ${index + 1}**\n`;
+            msg += `*Transaction ${index + 1}*\n`;
             msg += `- Amount: ₹${transaction.amount}\n`;
             msg += `- Date: ${transactionDate}\n`;
             msg += `- Time: ${transactionTime}\n\n`;
