@@ -43,7 +43,7 @@ async function sendLastTransactionDetails(fromNumber) {
         );
     } else {
         // Format the last transaction details
-        let msg = `Hello ${user.student_name}, here is your last 5 transaction history:\n\n`;
+        let msg = `Hello ${user.student_name}(${user.student_id}), here is your last 5 transaction history:\n\n`;
         user.last_transactions.forEach((transaction, index) => {
             const transactionDate = new Date(transaction.date).toLocaleDateString("en-US", {
                 weekday: "short",
@@ -153,4 +153,54 @@ Enter your registered mobile number on the payment portal
     return twiml;
 }
 
-module.exports = { sendLastTransactionDetails, toDisableCard, toTopUp };
+// Function to send last transaction details
+async function sendLastTopupDetails(fromNumber) {
+    const twiml = new MessagingResponse();
+    const { user, errorMessage } = await fetchUser(fromNumber);
+
+    if (errorMessage) {
+        twiml.message(errorMessage);
+        return twiml;
+    }
+
+    if (!user.last_top_ups || user.last_top_ups.length === 0) {
+        twiml.message(
+            "We couldn't find any transaction history for your account."
+        );
+    } else {
+        // Format the last transaction details
+        let msg = `Hello ${user.student_name}(${user.student_id}), here is your last 5 top-up history:\n\n`;
+        user.last_top_ups.forEach((transaction, index) => {
+            const transactionDate = new Date(transaction.date).toLocaleDateString("en-US", {
+                weekday: "short",
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+            });
+
+            const transactionTime = new Date(transaction.date).toLocaleTimeString("en-US", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: false,
+            });
+
+            msg += `*Transaction ${index + 1}*\n`;
+            msg += `- Amount: ₹${transaction.amount}\n`;
+            msg += `- Date: ${transactionDate}\n`;
+            msg += `- Time: ${transactionTime}\n\n`;
+        });
+
+        //         const msg = `Hello ${user.student_name}, here are your last transaction details:
+        // - Registration Number: ${user.student_id}
+        // - Remaining Balance: ₹${user.balance}
+        // - Transaction Date: ${transactionDate}
+        // - Transaction Time: ${transactionTime}`;
+        msg += `Current balance: ${user.balance}\n`;
+        twiml.message(msg);
+    }
+
+    return twiml;
+}
+
+module.exports = { sendLastTransactionDetails, toDisableCard, toTopUp,sendLastTopupDetails };
