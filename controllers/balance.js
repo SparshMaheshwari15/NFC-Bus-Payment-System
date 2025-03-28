@@ -29,7 +29,7 @@ exports.deductBalanceBus = async (req, res) => {
             user.status = "Disabled";
             return res.status(400).json({ error: "Insufficient balance" });
         } else if (
-            user.last_transaction &&
+            user.last_transactions &&
             user.last_transactions.length > 0 &&
             now - user.last_transactions[user.last_transactions.length - 1].date < MIN_TIME_BETWEEN_TRANSACTION
         ) {

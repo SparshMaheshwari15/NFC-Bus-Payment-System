@@ -3,7 +3,6 @@ const sendWhatsAppMessage = require("../utils/Twilio/twilioClient");
 
 exports.confirmPayment = async (req, res) => {
     const { payload } = req.body;
-    // console.log(payload);
     if (
         payload &&
         payload.payment_link &&
@@ -29,8 +28,10 @@ exports.confirmPayment = async (req, res) => {
             const amountPaid =
                 parseInt(payload.payment_link.entity.amount_paid, 10) / 100; // Convert to ₹
             user.balance += amountPaid;
-            user.last_top_up_date = new Date();
-            user.last_top_up_amount = amountPaid;
+
+            // Update last top-ups array
+            user.last_top_ups.push({ date: new Date(), amount: amountPaid });
+
             await user.save();
 
             // Send WhatsApp confirmation
@@ -39,7 +40,7 @@ Your payment of ₹${amountPaid} is successfull
 Updated balance is ₹${user.balance}
 `;
             sendWhatsAppMessage(phone, msg);
-            // console.log("Balance updated after payment");
+
             res.status(200).send("Balance updated after payment");
         } else {
             console.log("User not found in razorpay payment");

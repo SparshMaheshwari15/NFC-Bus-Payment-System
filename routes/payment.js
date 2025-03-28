@@ -13,7 +13,7 @@ router.get("/status", async (req, res) => {
         !razorpay_signature ||
         razorpay_payment_link_status !== "paid"
     ) {
-        return res.render("/payment/failed");
+        return res.render("payment/failed");
     }
 
     // try {
