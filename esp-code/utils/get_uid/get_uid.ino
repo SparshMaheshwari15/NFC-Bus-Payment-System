@@ -2,15 +2,17 @@
 #include <MFRC522.h>
 
 
-#define SS_PIN 21    // SDA pin
-#define RST_PIN 22   // RST pin
+#define SS_PIN 21   // SDA pin
+#define RST_PIN 22  // RST pin
+
+#define BUZZER_PIN 13  // D13 for the buzzer
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
 
 void setup() {
-  Serial.begin(115200);   // Initialize serial communications
-  SPI.begin();            // Initialize SPI bus
-  mfrc522.PCD_Init();     // Initialize MFRC522 card reader
+  Serial.begin(115200);  // Initialize serial communications
+  SPI.begin();           // Initialize SPI bus
+  mfrc522.PCD_Init();    // Initialize MFRC522 card reader
   Serial.println("Place your card to the reader...");
 }
 
@@ -32,6 +34,7 @@ void loop() {
     Serial.print(mfrc522.uid.uidByte[i], HEX);
   }
   Serial.println();
+
 
   // Halt PICC (to stop communication with the card)
   mfrc522.PICC_HaltA();

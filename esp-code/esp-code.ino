@@ -14,6 +14,9 @@
 #define CUSTOM_SDA 4
 #define CUSTOM_SCL 5
 
+// #define BUZZER_PIN 13  // D13 for the buzzer
+#define FAIL_LED 12
+
 MFRC522 mfrc522(SS_PIN, RST_PIN);    // Create MFRC522 instance
 LiquidCrystal_I2C lcd(0x27, 16, 2);  // set the LCD address to 0x3F for a 16 chars and 2 line display
 
@@ -52,6 +55,9 @@ void setup() {
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Place your card to the reader...");
+
+  // pinMode(BUZZER_PIN, OUTPUT);  // Set buzzer pin as output
+  pinMode(FAIL_LED, OUTPUT);
 }
 
 void loop() {
@@ -137,6 +143,7 @@ void deductBalance(String cardID, int amount) {
       const char* errorMsg = doc["error"];
       int new_balance = doc["new_balance"];
       if (success && strlen(success) > 0) {
+        // digitalWrite(BUZZER_PIN, HIGH);
         lcd.clear();
         lcd.setCursor(0, 0);
         lcd.print(success);
@@ -144,6 +151,7 @@ void deductBalance(String cardID, int amount) {
         lcd.print("Balance: ");
         lcd.print(new_balance);
       } else if (errorMsg && strlen(errorMsg) > 0) {
+        digitalWrite(FAIL_LED, HIGH);
         lcd.clear();
         lcd.setCursor(0, 0);
         lcd.print(errorMsg);
@@ -154,6 +162,7 @@ void deductBalance(String cardID, int amount) {
       lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print("Error on sending POST");
+      digitalWrite(FAIL_LED, HIGH);
     }
 
     http.end();  // Free resources
@@ -167,6 +176,8 @@ void deductBalance(String cardID, int amount) {
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Place your card");
+  // digitalWrite(BUZZER_PIN, LOW);
+  digitalWrite(FAIL_LED, LOW);
 }
 
 void sendLoginRequest() {
@@ -180,8 +191,8 @@ void sendLoginRequest() {
     http.addHeader("Content-Type", "application/json");
 
     // Create the JSON payload with username and password
-    String requestBody = "{\"username\":\"" + String(driverLoginId) + "\",\"password\":\"" + String(driverLoginPass) + "\"}";
-
+    // String requestBody = "{\"username\":\"" + String(driverLoginId) + "\",\"password\":\"" + String(driverLoginPass) + "\"}";
+    String requestBody = "{\"username\":\"abcd\",\"password\":\"abcd\"}";
     // Send the POST request with the payload
     int httpResponseCode = http.POST(requestBody);
 
