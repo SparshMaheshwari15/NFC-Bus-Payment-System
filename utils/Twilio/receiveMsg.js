@@ -185,7 +185,7 @@ async function sendLastTopupDetails(fromNumber) {
                 hour12: false,
             });
 
-            msg += `*Transaction ${index + 1}*\n`;
+            msg += `*Top-up ${index + 1}*\n`;
             msg += `- Amount: ₹${transaction.amount}\n`;
             msg += `- Date: ${transactionDate}\n`;
             msg += `- Time: ${transactionTime}\n\n`;
