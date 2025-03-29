@@ -1,0 +1,17 @@
+# Exclude Node.js modules (already installed during image build)
+node_modules/
+
+# Exclude environment files
+.env
+
+# Exclude miscellaneous files
+commands.txt
+
+# Exclude specific directories
+init/
+esp-code/
+
+# Exclude documentation and videos
+Project summary.docx
+Project summary.pdf
+Demo videos/
