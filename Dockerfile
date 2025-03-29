@@ -2,7 +2,7 @@
 FROM node:lts-alpine3.21
 
 # Set the working directory inside the container (create NFC Project directory)
-WORKDIR /usr/src/app/NFC-project
+WORKDIR /usr/src/app/app
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
