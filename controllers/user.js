@@ -45,13 +45,13 @@ exports.addUser = async (req, res) => {
     try {
         // Check for duplicates based on card_id or student_id
         const existingUser = await User.findOne({
-            $or: [{ card_id: user.card_id }, { student_id: user.student_id }],
+            $or: [{ card_id: user.card_id }, { student_id: user.student_id },{ phone_number: user.phone_number }],
         });
 
         if (existingUser) {
             req.flash(
                 "error",
-                "User already exists with the provided card id or student id"
+                "User already exists with the provided card id or student id or phone number"
             );
             return res.redirect("/users/add");
         }
